@@ -1,3 +1,6 @@
 [submodule "store"]
 	path = store
 	url = https://github.com/jhondavila/wxio-store.git
+[submodule "components/table"]
+	path = components/table
+	url = https://github.com/jhondavila/wxio-table.git
