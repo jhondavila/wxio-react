@@ -1,7 +1,5 @@
 import moment from 'moment';
-import Config from '../config';
 import * as _ from "lodash";
-import { i18next } from "../translations/index"
 import Handlebars from "handlebars";
 
 let propToString = Object.prototype.toString;
@@ -105,42 +103,7 @@ class Utils {
             return false;
         }
     }
-    pathResolve(photo) {
-        let regExp = new RegExp("^(http|https):\/\/", "gmi");
-        if (photo) {
-            if (!regExp.exec(photo)) {
-                if (photo.substring(0, 1) === "/") {
-                    photo = Config[Config.secondary] + photo;
-                } else {
-                    photo = Config[Config.secondary] + "/" + photo;
-                }
-            }
-        }
-        // console.log(photo)
-        return photo;
-    }
-
-
-    urlResolve(url) {
-        return this.urlJoin(Config[Config.secondary], url);
-    }
-    pathResolveItem(image) {
-        if (image) {
-            return this.urlJoin(Config[Config.secondary], "public", image.base_path, image.filename);
-        } else {
-            return;
-        }
-    }
-    pathResolveItemOriginal(image) {
-        if (image) {
-            let parts = image.filename.split(".");
-            let filename = parts[0].replace("_r", "") + "." + parts[1];
-            return this.urlJoin(Config[Config.secondary], "public", image.base_path, filename);
-        } else {
-            return;
-        }
-    }
-
+ 
 
     urlJoin(basePath) {
         if (basePath === "./") {
@@ -200,72 +163,13 @@ class Utils {
     }
 
 
-    t(text, opts) {
-        return i18next.t(`${text}`, { ns: "namespace1", ...opts })
-    }
-
+    
     // tOpts({ space, t, lan }) {
     //     return i18next.t(`namespace1:${text}`)
     // }
 
 
-    timeAgoShort(created) {
-        var now = new Date();
-
-        now = moment(now);
-
-        var days = now.diff(created, "days");
-        var hours = now.diff(created, "hours");
-        var minutes = now.diff(created, "minutes");
-
-        var message;
-        if (minutes < 1) {
-            message = this.t("time_a_while_ago");
-        } else if (minutes < 60) {
-            message = this.format(this.t("time_x_minutes_ago"), minutes, (minutes > 1 ? "s" : ""));
-        } else if (hours < 24) {
-            message = this.format(this.t("time_x_hours_ago"), hours, (hours > 1 ? "s" : ""));
-        } else if (days < 8) {
-            message = this.format(this.t("time_x_days_ago"), days, (days > 1 ? "s" : ""));
-        } else {
-            message = this.format(this.t("time_hhmm_DD_MMMM"), created.format("HH:mm - DD"), created.format("MMMM"));
-        }
-
-        return message;
-    }
-    timeAgo(created) {
-        let now = moment();
-        var years = now.diff(created, "years");
-        var months = now.diff(created, "months");
-        var weeks = now.diff(created, "weeks");
-        var days = now.diff(created, "days");
-        var hours = now.diff(created, "hours");
-        var minutes = now.diff(created, "minutes");
-
-        var message;
-        if (minutes < 1) {
-            message = this.t("time_a_while_ago");
-        } else if (minutes < 60) {
-            message = this.format(this.t("time_x_minutes_ago"), minutes, (minutes > 1 ? "s" : ""));
-        } else if (hours < 24) {
-            if (now.format("DD") == created.format("DD")) {
-                message = this.format(this.t("time_today"), created.format("HH:mm"));
-            } else {
-                message = this.format(this.t("time_yesterday"), created.format("HH:mm"));
-            }
-        } else if (days < 7) {
-            message = this.format(this.t("time_x_days_ago"), days, (days > 1 ? "s" : ""));
-        } else if (weeks < 4) {
-            message = this.format(this.t("time_x_week_ago"), weeks, (weeks > 1 ? "s" : ""));
-        } else if (months < 12) {
-            message = this.format(this.t("time_x_month_ago"), months, (months > 1 ? "s" : ""));
-        } else if (years < 2) {
-            message = this.format(this.t("time_x_year_ago"), years, (years > 1 ? "s" : ""));
-        } else {
-            message = this.t("time_a_long_time_ago");
-        }
-        return message;
-    }
+  
     capitalize(str) {
         if (str) {
             str = str.charAt(0).toUpperCase() + str.substr(1);
@@ -499,54 +403,7 @@ class Utils {
         }
     }
 
-    applyTypes(i) {
-        // try {
-        let v, key;
-        key = i.sys;
-
-        if (i.type === "image") {
-            if (i.icon) {
-                v = this.urlJoin(Config[Config.secondary], "public", i.icon.base_path, i.icon.filename);
-            } else {
-                v = "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
-            }
-        } else if (i.type === "emptyimage") {
-            if (i.icon) {
-                v = this.urlJoin(Config[Config.secondary], "public", i.icon.base_path, i.icon.filename);
-            } else {
-                v = null;
-            }
-        } else if (i.type === "integer") {
-            v = i ? parseInt(i.value) : null;
-        } else if (i.type === "number") {
-            v = parseFloat(i.value);
-        } else if (i.type === "string") {
-            v = i.value;
-        } else if (i.type === "color") {
-            v = i.value || "transparent";
-        } else if (i.type === "radio") {
-            v = i.value;
-        } else if (i.type === "boolean") {
-            if (i.value == "true" || i.value == "1") {
-                v = true;
-            } else {
-                v = false;
-            }
-        } else if (i.type === "array") {
-            try {
-                v = JSON.parse(i.value);
-            } catch (error) {
-                console.log(error)
-            }
-        } else if (i.type === "dateiso") {
-            v = new Date(i.value);
-        }
-        return v;
-        // } catch (error) {
-        //     console.log(error)
-        //     return null;
-        // }
-    }
+   
 }
 
 
