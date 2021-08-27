@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Uploader } from "../upload";
 import { Importer } from "./Base";
-import Path from "../../Wx/util/Path";
+import Path from "../../util/Path";
 import { ModalDiffColumns } from "./DiffColumns";
 
 class ButtonImport extends Component {
@@ -23,7 +23,6 @@ class ButtonImport extends Component {
             let file = files[x];
             if (importer.isExcel(file)) {
                 let { headers, results } = await importer.readerData(file);
-
                 records = await this.proccess({ headers, results });
                 // let columns = this.props.columns;
                 // columns = header;
@@ -51,33 +50,43 @@ class ButtonImport extends Component {
         let headersAvailables = [...headers];
 
         let columnsNoFind = [];
+        // debugger
         // let headerNoIdentified = [];
-        columns.forEach(c => {
-            let find = false;
+        if (columns) {
+            columns.forEach(c => {
+                let find = false;
 
+                for (let x = 0; x < headersAvailables.length; x++) {
+                    let headerText = headersAvailables[x];
+
+                    let headerCoincidences = Array.isArray(c.headers) ? c.headers : [c.headers];
+
+                    headerCoincidences = headerCoincidences.filter(i => !!i);
+                    let headerCheck = headerText;
+                    if (c.ignoreCase) {
+                        headerCoincidences = headerCoincidences.map(i => i.toLowerCase());
+                        headerCheck = headerText.toLowerCase();
+                    }
+
+                    if (headerCoincidences.includes(headerCheck)) {
+                        keys[c.dataIndex] = headerText;
+                        find = true;
+                        break;
+                    }
+                }
+
+                if (!find) {
+                    columnsNoFind.push(c.dataIndex);
+                }
+            });
+        } else {
             for (let x = 0; x < headersAvailables.length; x++) {
                 let headerText = headersAvailables[x];
-
-                let headerCoincidences = Array.isArray(c.headers) ? c.headers : [c.headers];
-
-                headerCoincidences = headerCoincidences.filter(i => !!i);
-                let headerCheck = headerText;
-                if (c.ignoreCase) {
-                    headerCoincidences = headerCoincidences.map(i => i.toLowerCase());
-                    headerCheck = headerText.toLowerCase();
-                }
-
-                if (headerCoincidences.includes(headerCheck)) {
-                    keys[c.dataIndex] = headerText;
-                    find = true;
-                    break;
-                }
+                keys[headerText] = headerText;
             }
+            // columns = keys[c.dataIndex]
+        }
 
-            if (!find) {
-                columnsNoFind.push(c.dataIndex);
-            }
-        });
         let records;
         if (columnsNoFind.length > 0) {
             let response = await ModalDiffColumns({
@@ -90,6 +99,7 @@ class ButtonImport extends Component {
             if (response) {
                 let data = this.processData({ results, keys: response.keys });
                 records = this.props.store.add(data);
+                this.props.store.emit("import");
                 await this.validateRecords(records);
             } else {
                 return false;
@@ -97,11 +107,10 @@ class ButtonImport extends Component {
         } else {
             let data = this.processData({ results, keys });
             records = this.props.store.add(data);
+            this.props.store.emit("import");
             await this.validateRecords(records);
         }
-
         return records;
-
     }
 
     async validateRecords(records) {

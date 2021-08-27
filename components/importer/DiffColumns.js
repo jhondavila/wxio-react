@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Uploader } from "../upload";
 import { Importer } from "./Base"
-import createConfirmation from "../modal/createModalStore"
+import createConfirmation from "../modal/createModal"
 import { Col, Row, Container, Image, Button, Form, Modal, Carousel } from "react-bootstrap"
 
 class DiffColumns extends Component {

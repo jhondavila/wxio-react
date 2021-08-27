@@ -3,7 +3,7 @@
 import React from 'react'
 import reactCSS from 'reactcss'
 import { SketchPicker } from 'react-color'
-import Utils from "../../Wx/index"
+import Utils from "../../index"
 
 import { Container, Row, Col, Image, Modal, Button, Form } from 'react-bootstrap';
 class SketchExample extends React.Component {

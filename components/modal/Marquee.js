@@ -7,7 +7,7 @@ import { SketchPicker } from 'react-color'
 // import "./style.scss";
 import ButtonPicker from "./ButtonPicker";
 import { withTranslation } from "react-i18next"
-import Utils from "../../Wx/index"
+import Utils from "../../index"
 // import { useTranslation, Trans, I18nextProvider } from 'react-i18next';
 // import { i18next } from "../../translations/index"
 class ModalPrompt extends React.Component {

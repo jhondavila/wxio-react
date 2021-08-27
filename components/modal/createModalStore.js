@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ProjectManager from "../../redux/ProjectManager";
+import ProjectManager from "../../../redux/ProjectManager";
 import { Provider } from 'react-redux';
 import { Promise as BBPromise } from "bluebird";
 BBPromise.config({

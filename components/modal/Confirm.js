@@ -5,7 +5,7 @@ import { faCircleNotch, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { Container, Row, Col, Image, Modal, Button } from 'react-bootstrap';
 
 // import "./style.scss";
-import Utils from "../../Wx"
+import Utils from "../../index"
 
 class ModalConfirm extends React.Component {
 

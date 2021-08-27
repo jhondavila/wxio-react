@@ -4,8 +4,6 @@ import { Col, Row, Container, Image, Button, Form } from "react-bootstrap"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleRight, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { faTimesCircle } from '@fortawesome/free-regular-svg-icons'
-import ProjectManager from "../../redux/ProjectManager";
-import bhistory from "../../navigation/History"
 import plugins from "./plugins";
 import toolbar from "./toolbar";
 

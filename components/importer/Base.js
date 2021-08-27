@@ -12,7 +12,11 @@ class Importer {
                 const firstSheetName = workbook.SheetNames[0]
                 const worksheet = workbook.Sheets[firstSheetName]
                 const headers = this.getHeaderRow(worksheet)
-                const results = XLSX.utils.sheet_to_json(worksheet)
+                const results = XLSX.utils.sheet_to_json(worksheet, {
+                    raw: false, cellDates: true,
+                    // dateNF: 'yyyy-mm-dd'
+                })
+                console.log(results)
                 // this.generateData({ header, results })
                 this.loading = false;
                 resolve({ headers, results });
