@@ -1,0 +1,25 @@
+.wx-data-list{
+
+    .ReactVirtualized__Grid__innerScrollContainer > *{
+        display: flex;
+        background-color: white;
+        border-top: 1px solid #adb5bd;
+        border-left: 1px solid #adb5bd;
+        border-right: 1px solid #adb5bd;
+        padding: 10px;
+    }
+
+    .ReactVirtualized__Grid__innerScrollContainer:nth-last-child(1) {
+		border-bottom: 1px solid #adb5bd;
+    }
+
+}
+
+.item{
+    display: flex;
+	background-color: white;
+	border-top: 1px solid #adb5bd;
+	border-left: 1px solid #adb5bd;
+	border-right: 1px solid #adb5bd;
+	padding: 10px;
+}

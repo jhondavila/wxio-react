@@ -7,7 +7,9 @@ import {
 	CellMeasurerCache,
 } from 'react-virtualized';
 import equal from "fast-deep-equal";
-class DataView extends React.Component {
+
+import "./styles.scss"
+class DataList extends React.Component {
 
 
 	constructor(props) {
@@ -149,7 +151,7 @@ class DataView extends React.Component {
 								rowHeight={this.cache.rowHeight}
 								deferredMeasurementCache={this.cache}
 								rowCount={count}
-								className={`list-inner ` + this.props.className}
+								className={`wx-data-list list-inner` + this.props.className}
 								rowRenderer={({ key, index, style, parent }) => {
 									const record = store.getAt(index);
 									return (
@@ -162,7 +164,7 @@ class DataView extends React.Component {
 										>
 											<div className="wrapper-item" style={style}>
 												{
-													this.props.rowRenderer ? this.props.rowRenderer({ key, index, parent, style, record }) : null
+													this.props.displayTpl ? this.props.displayTpl({ key, index, parent, style, record }) : null
 												}
 											</div>
 
@@ -178,11 +180,11 @@ class DataView extends React.Component {
 
 	}
 }
-DataView.defaultProps = {
+DataList.defaultProps = {
 	propertyId: "id"
 };
 
 
 export {
-	DataView
+	DataList
 }
