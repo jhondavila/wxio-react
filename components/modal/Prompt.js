@@ -1,11 +1,10 @@
 
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleNotch, faSpinner } from '@fortawesome/free-solid-svg-icons'
+//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+//import { faCircleNotch, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { Container, Row, Col, Image, Modal, Button, Form } from 'react-bootstrap';
 
 // import "./style.scss";
-import Utils from "../../index"
 
 class ModalPrompt extends React.Component {
 
@@ -22,7 +21,6 @@ class ModalPrompt extends React.Component {
             this.input.focus();
             this.input.select();
         }
-     
     }
     componentWillUnmount() {
         // clearInterval(this.timerRefresh);
@@ -109,7 +107,7 @@ class ModalPrompt extends React.Component {
                     {
                         !this.props.hideConfirm && <Button variant="primary" onClick={this.confirm.bind(this)}>{this.props.textConfirm || Utils.t("confirm")}</Button>
                     }
-
+                    
                 </Modal.Footer>
             </Modal>
         )
