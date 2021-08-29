@@ -2,3 +2,6 @@
 
 # dependencies
 
+/store/
+/components/table/
+/common/
