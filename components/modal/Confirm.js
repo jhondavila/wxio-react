@@ -1,11 +1,10 @@
 
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleNotch, faSpinner } from '@fortawesome/free-solid-svg-icons'
+//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+//import { faCircleNotch, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { Container, Row, Col, Image, Modal, Button } from 'react-bootstrap';
 
 // import "./style.scss";
-import Utils from "../../index"
 
 class ModalConfirm extends React.Component {
 
@@ -16,7 +15,7 @@ class ModalConfirm extends React.Component {
         }
     }
     componentDidMount() {
-      
+
     }
     componentWillUnmount() {
         // clearInterval(this.timerRefresh);
@@ -60,16 +59,14 @@ class ModalConfirm extends React.Component {
                     </Modal.Header>
                 }
                 {
-
-                    (this.props.html || this.props.desc) && (this.props.html ?
+                    (this.props.html || this.props.desc) &&
+                    (this.props.html ?
                         <Modal.Body dangerouslySetInnerHTML={{ __html: this.props.html }}></Modal.Body>
                         :
                         <Modal.Body >
                             {this.props.desc}
                         </Modal.Body>)
-
                 }
-
                 <Modal.Footer>
                     {
                         !this.props.hideClose && <Button variant="secondary" onClick={this.cancel.bind(this)}>
