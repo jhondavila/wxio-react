@@ -1,5 +1,11 @@
 import createModal from "./createModal"
 
+
+import Confirm from "./Confirm";
+import Prompt from "./Prompt";
+import Toast from "./Toast";
+import Alert from "./Alert";
+
 import Confirm from "./Confirm"
 import Options from "./Options";
 import Prompt from "./Prompt";
@@ -17,4 +23,8 @@ export const msgNotification = createModal(Notification);
 export const msgPreviewPhoto = createModal(PreviewPhoto);
 export const msgPreviewVideo = createModal(PreviewVideo);
 
+
+export const msgAlert = createModal(Alert);
+export const msgPrompt = createModal(Prompt);
+export const msgToast = createModal(Toast);
 
