@@ -133,7 +133,7 @@ class TinyMCE extends React.Component {
     }
     closeRightPanel() {
         // let project = ProjectManager.getActive();
-        // let path = Utils.format(pathBase, project.name);
+        // let path = Wx.format(pathBase, project.name);
         // let history = this.props.history;
 
 
