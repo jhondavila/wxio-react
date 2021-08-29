@@ -74,7 +74,7 @@ class DataList extends React.Component {
 				let total = await this.props.store.total
 				this.setState({
 					myData: data,
-					total : total
+					total: total
 				});
 			} else if (prevProps.store) {
 				this.removeHooks(prevProps.store);
@@ -136,7 +136,80 @@ class DataList extends React.Component {
 			})
 		}
 	}
+	selectionModel = (e, row) => {
+		console.log(e.ctrlKey)
+		if (this.props.onClickRow) {
+			this.props.onClickRow(row);
+		}
+		if (this.props.selectionMode === "multiple" && e.ctrlKey) {
 
+			let value = !this.state.selection[row.getId()];
+
+			if (value) {
+				this.setState({
+					selection: {
+						...this.state.selection,
+						[row.getId()]: true
+					}
+				}, () => {
+					this.selectionChange()
+				});
+
+			} else {
+				let selection = Object.assign({}, this.state.selection);
+
+				if (this.state.checkedAll) {
+
+					for (let p in this.props.store.mapping) {
+						selection[p] = true;
+					}
+				}
+				delete selection[row.getId()];
+				this.setState({
+					checkedAll: false,
+					selection: selection
+				}, () => {
+					this.selectionChange()
+				});
+
+			}
+			/*
+			this.setState({
+				checkedAll: false,
+				selection: {
+					...this.state.selection,
+					[row.getId()]: true
+				}
+			}, () => {
+				this.selectionChange()
+			});*/
+		} else {
+			if (!this.state.selection[row.getId()]) {
+				this.setState({
+					checkedAll: false,
+					selection: {
+						[row.getId()]: true
+					}
+				}, () => {
+					this.selectionChange()
+				});
+			}
+		}
+	}
+	selectionChange() {
+		if (this.props.onSelectionChange) {
+			let selection = [];
+			if (this.state.checkedAll) {
+				selection.push(...this.props.store.data);
+			} else {
+				for (let p in this.state.selection) {
+					let record = this.props.store.getById(p);
+					selection.push(record);
+				}
+			}
+			this.props.onSelectionChange(selection)
+		}
+	}
 	render() {
 		let { store } = this.props;
 		let count = store ? store.count() : 0;
@@ -147,13 +220,14 @@ class DataList extends React.Component {
 						(
 							<List
 								width={width}
-								height={height-this.props.reduceHeight}
+								height={height - this.props.reduceHeight}
 								rowHeight={this.cache.rowHeight}
 								deferredMeasurementCache={this.cache}
 								rowCount={count}
 								className={`wx-data-list list-inner` + this.props.className}
 								rowRenderer={({ key, index, style, parent }) => {
 									const record = store.getAt(index);
+									const selected = this.state.selection[record.getId()] || this.state.checkedAll ? true : false
 									return (
 										<CellMeasurer
 											key={record.get(this.props.propertyId)}
@@ -162,7 +236,11 @@ class DataList extends React.Component {
 											columnIndex={0}
 											rowIndex={index}
 										>
-											<div className="wrapper-item" style={style}>
+											<div
+												onClick={(e) => {
+													this.selectionModel(e,  record)
+												}}
+												className={`wrapper-item ${selected ? "item-selected" : ""}`} style={style}>
 												{
 													this.props.displayTpl ? this.props.displayTpl({ key, index, parent, style, record }) : null
 												}
