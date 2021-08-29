@@ -233,23 +233,26 @@ class DataList extends React.Component {
 			this.props.onSelectionChange(selection)
 		}
 	}
-	isRowLoaded(){
-		console.log("isRowLoaded")
+	isRowLoaded({ index }) {
+		console.log("isRowLoaded", index, this.props.store.getAt(index) ? true : false)
+		return this.props.store.getAt(index) ? true : false;
 	}
-	loadMoreRows(){
-		console.log("loadMoreRows")
+
+	loadMoreRows({ startIndex, stopIndex }) {
+		console.log("loadMoreRows", startIndex, stopIndex)
+		this.props.store.nextPage();
 	}
 	render() {
 		let { store } = this.props;
 		let count = store ? store.count() : 0;
-		let remoteRowCount = store.total;
+		let remoteRowCount = parseInt(store.total);
 		let idProperty = this.props.idProperty || store.model.idProperty;
+
 		if (count == 0) {
 			return (
 				<div>{this.props.msgNoData || "No hay registros"}</div>
 			)
 		}
-		console.log(remoteRowCount,"<<<<<<<<<<<<<<<<<<")
 		return (
 			<AutoSizer>
 				{({ width, height }) => {
@@ -260,17 +263,9 @@ class DataList extends React.Component {
 								isRowLoaded={this.isRowLoaded.bind(this)}
 								loadMoreRows={this.loadMoreRows.bind(this)}
 								rowCount={remoteRowCount}
+								minimumBatchSize={this.props.store.pageSize}
 							>
 								{({ onRowsRendered, registerChild }) => (
-									// <List
-									// 	height={200}
-									// 	
-									// 	
-									// 	rowCount={remoteRowCount}
-									// 	rowHeight={20}
-									// 	rowRenderer={rowRenderer}
-									// 	width={300}
-									// />
 
 									<List
 										onRowsRendered={onRowsRendered}
@@ -282,36 +277,60 @@ class DataList extends React.Component {
 										rowCount={remoteRowCount}
 										className={`wx-data-list list-inner` + this.props.className}
 										rowRenderer={({ key, index, style, parent }) => {
+
 											const record = store.getAt(index);
-											const selected = this.state.selection[record.getId()] || this.state.checkedAll ? true : false;
+											if (record) {
+												const selected = this.state.selection[record.getId()] || this.state.checkedAll ? true : false;
+												return (
+													<CellMeasurer
+														key={record.get(idProperty)}
+														cache={this.cache}
+														parent={parent}
+														columnIndex={0}
+														rowIndex={index}
+													>
+														<div
+															onClick={(e) => {
+																this.selectionModel(e, record)
+															}}
+															className={`wrapper-item ${selected ? "item-selected" : ""}`} style={style}>
+															{
+																this.props.displayTpl ? this.props.displayTpl({ key, index, parent, style, record }) : null
+															}
+														</div>
 
-											return (
-												<CellMeasurer
-													key={record.get(idProperty)}
-													cache={this.cache}
-													parent={parent}
-													columnIndex={0}
-													rowIndex={index}
-												>
-													<div
-														onClick={(e) => {
-															this.selectionModel(e, record)
-														}}
-														className={`wrapper-item ${selected ? "item-selected" : ""}`} style={style}>
-														{
-															this.props.displayTpl ? this.props.displayTpl({ key, index, parent, style, record }) : null
-														}
-													</div>
+													</CellMeasurer>
+												);
 
-												</CellMeasurer>
-											);
+											} else {
+												return (
+													<CellMeasurer
+														key={`empty-${index}`}
+														cache={this.cache}
+														parent={parent}
+														columnIndex={0}
+														rowIndex={0}
+													>
+														<div
+															onClick={(e) => {
+																this.selectionModel(e, record)
+															}}
+															className={`wrapper-item `} style={style}>
+															{
+																this.props.displayTplLoading ? this.props.displayTplLoading({ key, index, parent, style, record }) : null
+															}
+														</div>
+													</CellMeasurer>
+												);
+											}
+
 										}}
 									/>
 
 								)}
 							</InfiniteLoader>
 
-							
+
 						)
 					)
 				}}
@@ -321,7 +340,7 @@ class DataList extends React.Component {
 	}
 }
 DataList.defaultProps = {
-
+	autoLoad: true
 };
 
 
