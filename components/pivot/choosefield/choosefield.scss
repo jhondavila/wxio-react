@@ -1,0 +1,101 @@
+@import "node_modules/bootstrap/scss/mixins/breakpoints";
+@import "../../../css/_brackpoint-variables";
+
+.chooser-selector {
+    background-color: white;
+    padding: 5px;
+    margin: 0;
+    .chooser-availables {
+        // height: 100%;
+        overflow: auto;
+        margin: 5px;
+        padding: 5px;
+        border-style: solid;
+        border-color: rgba(0, 0, 0, 0.5);
+        border-width: 1px;
+        max-width: 250px;
+        flex: 1;
+    }
+
+    .chooser-groups {
+        max-width: 450px;
+        height: 100%;
+    }
+
+    .chooser-groups {
+        flex: 1;
+    }
+
+    .chooser-row {
+        flex: 1;
+        height: 50%;
+    }
+    .chooser-fields {
+        flex: 1;
+        padding: 5px;
+        border-style: solid;
+        border-color: rgba(0, 0, 0, 0.5);
+        border-width: 1px;
+        margin: 5px;
+        // height: 100%;
+        overflow: auto;
+        .icon-title {
+            margin-left: 5px;
+        }
+    }
+    .choose-field {
+        border: 0.5px solid rgba(0, 0, 0, 0.2);
+        padding: 0.2rem 0.2rem;
+        margin-bottom: 0.5rem;
+        background-color: white;
+        cursor: move;
+        opacity: 1;
+        font-size: 14px;
+    }
+    .config {
+        cursor: pointer;
+    }
+}
+
+@include media-breakpoint-up(sm) {
+    .wx-modal-choosefield-dnd {
+        max-width: 700px;
+    }
+}
+
+.chooser-filter-condition {
+    background-color: white;
+    width: 300px;
+    padding: 10px;
+    .form-control:disabled, .form-control[readonly]{
+        background-color: white;
+        opacity: 1;
+    }
+
+    .filter-values{
+        margin-top: 20px;
+        .fast-option{
+
+            font-size: 12px;
+        }
+    }
+
+    .cursor-pointer{
+        cursor: pointer;
+    }
+
+    .text-clickeable{
+        color: darkblue;
+        &:hover{
+            text-decoration: underline;
+            color: rgb(40, 40, 94);
+        }
+    }
+
+    .filter-options{
+        height: 300px;
+        .list-filter{
+            height: 100%;
+        }
+    }
+}
