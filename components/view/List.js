@@ -141,7 +141,7 @@ class DataList extends React.Component {
 		if (this.props.onClickRow) {
 			this.props.onClickRow(row);
 		}
-		if (this.props.selectionMode === "multiple" && e.ctrlKey) {
+		if (this.props.selectionMode === "toggle") {
 
 			let value = !this.state.selection[row.getId()];
 
@@ -173,16 +173,38 @@ class DataList extends React.Component {
 				});
 
 			}
-			/*
-			this.setState({
-				checkedAll: false,
-				selection: {
-					...this.state.selection,
-					[row.getId()]: true
+		}else if (this.props.selectionMode === "multiple" && e.ctrlKey) {
+
+			let value = !this.state.selection[row.getId()];
+
+			if (value) {
+				this.setState({
+					selection: {
+						...this.state.selection,
+						[row.getId()]: true
+					}
+				}, () => {
+					this.selectionChange()
+				});
+
+			} else {
+				let selection = Object.assign({}, this.state.selection);
+
+				if (this.state.checkedAll) {
+
+					for (let p in this.props.store.mapping) {
+						selection[p] = true;
+					}
 				}
-			}, () => {
-				this.selectionChange()
-			});*/
+				delete selection[row.getId()];
+				this.setState({
+					checkedAll: false,
+					selection: selection
+				}, () => {
+					this.selectionChange()
+				});
+
+			}
 		} else {
 			if (!this.state.selection[row.getId()]) {
 				this.setState({
@@ -213,6 +235,8 @@ class DataList extends React.Component {
 	render() {
 		let { store } = this.props;
 		let count = store ? store.count() : 0;
+
+		let idProperty =  this.props.idProperty || store.model.idProperty;
 		return (
 			<AutoSizer>
 				{({ width, height }) => {
@@ -227,10 +251,11 @@ class DataList extends React.Component {
 								className={`wx-data-list list-inner` + this.props.className}
 								rowRenderer={({ key, index, style, parent }) => {
 									const record = store.getAt(index);
-									const selected = this.state.selection[record.getId()] || this.state.checkedAll ? true : false
+									const selected = this.state.selection[record.getId()] || this.state.checkedAll ? true : false;
+
 									return (
 										<CellMeasurer
-											key={record.get(this.props.propertyId)}
+											key={record.get(idProperty)}
 											cache={this.cache}
 											parent={parent}
 											columnIndex={0}
@@ -259,7 +284,7 @@ class DataList extends React.Component {
 	}
 }
 DataList.defaultProps = {
-	propertyId: "id"
+
 };
 
 
