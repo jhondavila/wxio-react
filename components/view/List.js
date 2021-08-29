@@ -5,6 +5,7 @@ import {
 	AutoSizer,
 	CellMeasurer,
 	CellMeasurerCache,
+	InfiniteLoader
 } from 'react-virtualized';
 import equal from "fast-deep-equal";
 
@@ -173,7 +174,7 @@ class DataList extends React.Component {
 				});
 
 			}
-		}else if (this.props.selectionMode === "multiple" && e.ctrlKey) {
+		} else if (this.props.selectionMode === "multiple" && e.ctrlKey) {
 
 			let value = !this.state.selection[row.getId()];
 
@@ -232,54 +233,85 @@ class DataList extends React.Component {
 			this.props.onSelectionChange(selection)
 		}
 	}
+	isRowLoaded(){
+		console.log("isRowLoaded")
+	}
+	loadMoreRows(){
+		console.log("loadMoreRows")
+	}
 	render() {
 		let { store } = this.props;
 		let count = store ? store.count() : 0;
-
-		let idProperty =  this.props.idProperty || store.model.idProperty;
-		if(count == 0){
+		let remoteRowCount = store.total;
+		let idProperty = this.props.idProperty || store.model.idProperty;
+		if (count == 0) {
 			return (
 				<div>{this.props.msgNoData || "No hay registros"}</div>
 			)
 		}
+		console.log(remoteRowCount,"<<<<<<<<<<<<<<<<<<")
 		return (
 			<AutoSizer>
 				{({ width, height }) => {
 					return (
 						(
-							<List
-								width={width}
-								height={height - this.props.reduceHeight}
-								rowHeight={this.cache.rowHeight}
-								deferredMeasurementCache={this.cache}
-								rowCount={count}
-								className={`wx-data-list list-inner` + this.props.className}
-								rowRenderer={({ key, index, style, parent }) => {
-									const record = store.getAt(index);
-									const selected = this.state.selection[record.getId()] || this.state.checkedAll ? true : false;
 
-									return (
-										<CellMeasurer
-											key={record.get(idProperty)}
-											cache={this.cache}
-											parent={parent}
-											columnIndex={0}
-											rowIndex={index}
-										>
-											<div
-												onClick={(e) => {
-													this.selectionModel(e,  record)
-												}}
-												className={`wrapper-item ${selected ? "item-selected" : ""}`} style={style}>
-												{
-													this.props.displayTpl ? this.props.displayTpl({ key, index, parent, style, record }) : null
-												}
-											</div>
+							<InfiniteLoader
+								isRowLoaded={this.isRowLoaded.bind(this)}
+								loadMoreRows={this.loadMoreRows.bind(this)}
+								rowCount={remoteRowCount}
+							>
+								{({ onRowsRendered, registerChild }) => (
+									// <List
+									// 	height={200}
+									// 	
+									// 	
+									// 	rowCount={remoteRowCount}
+									// 	rowHeight={20}
+									// 	rowRenderer={rowRenderer}
+									// 	width={300}
+									// />
 
-										</CellMeasurer>
-									);
-								}}
-							/>
+									<List
+										onRowsRendered={onRowsRendered}
+										ref={registerChild}
+										width={width}
+										height={height - this.props.reduceHeight}
+										rowHeight={this.cache.rowHeight}
+										deferredMeasurementCache={this.cache}
+										rowCount={remoteRowCount}
+										className={`wx-data-list list-inner` + this.props.className}
+										rowRenderer={({ key, index, style, parent }) => {
+											const record = store.getAt(index);
+											const selected = this.state.selection[record.getId()] || this.state.checkedAll ? true : false;
+
+											return (
+												<CellMeasurer
+													key={record.get(idProperty)}
+													cache={this.cache}
+													parent={parent}
+													columnIndex={0}
+													rowIndex={index}
+												>
+													<div
+														onClick={(e) => {
+															this.selectionModel(e, record)
+														}}
+														className={`wrapper-item ${selected ? "item-selected" : ""}`} style={style}>
+														{
+															this.props.displayTpl ? this.props.displayTpl({ key, index, parent, style, record }) : null
+														}
+													</div>
+
+												</CellMeasurer>
+											);
+										}}
+									/>
+
+								)}
+							</InfiniteLoader>
+
+							
 						)
 					)
 				}}
