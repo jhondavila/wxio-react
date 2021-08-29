@@ -1,12 +1,9 @@
 
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleNotch, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { Container, Row, Col, Image, Modal, Button, Form } from 'react-bootstrap';
 import { SketchPicker } from 'react-color'
 // import "./style.scss";
 import ButtonPicker from "./ButtonPicker";
-import { withTranslation } from "react-i18next"
 import Utils from "../../index"
 // import { useTranslation, Trans, I18nextProvider } from 'react-i18next';
 // import { i18next } from "../../translations/index"

@@ -1,7 +1,5 @@
 
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleNotch, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { Container, Row, Col, Image, Modal, Button, Form } from 'react-bootstrap';
 
 // import "./style.scss";

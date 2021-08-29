@@ -5,6 +5,7 @@ import React from 'react';
 import { Container, Row, Col, Image, Modal, Button, Form } from 'react-bootstrap';
 
 // import "./style.scss";
+import Utils from "../../index";
 
 class ModalPrompt extends React.Component {
 

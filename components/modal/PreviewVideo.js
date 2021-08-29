@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleNotch, faSpinner, faTimes } from '@fortawesome/free-solid-svg-icons'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { faCircleNotch, faSpinner, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { Container, Row, Col, Image, Modal, Button, Form } from 'react-bootstrap';
 
 // import "./style.scss";
@@ -16,7 +16,7 @@ class ModalPrompt extends React.Component {
     }
   }
   componentDidMount() {
-  
+
   }
   componentWillUnmount() {
     // clearInterval(this.timerRefresh);
@@ -56,7 +56,8 @@ class ModalPrompt extends React.Component {
       >
         <Modal.Body>
           <Button onClick={this.hideModal.bind(this)} className="modal-preview-photo-close">
-            <FontAwesomeIcon icon={faTimes}></FontAwesomeIcon>
+            {/* <FontAwesomeIcon icon={faTimes}></FontAwesomeIcon> */}
+            <strong style={{ color: "#ffffff", fontSize: 16 }}>X</strong>
           </Button>
           <Row className="m-auto">
             <video className="preview-photo-image w-100" src={this.props.src} type="video/mp4" controls autoPlay={this.props.autoPlay} muted={this.props.muted} />
