@@ -237,6 +237,11 @@ class DataList extends React.Component {
 		let count = store ? store.count() : 0;
 
 		let idProperty =  this.props.idProperty || store.model.idProperty;
+		if(count == 0){
+			return (
+				<div>{this.props.msgNoData || "No hay registros"}</div>
+			)
+		}
 		return (
 			<AutoSizer>
 				{({ width, height }) => {
