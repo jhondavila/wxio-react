@@ -5,6 +5,7 @@ import {
 	AutoSizer,
 	CellMeasurer,
 	CellMeasurerCache,
+	InfiniteLoader
 } from 'react-virtualized';
 import equal from "fast-deep-equal";
 
@@ -232,11 +233,19 @@ class DataList extends React.Component {
 			this.props.onSelectionChange(selection)
 		}
 	}
+	isRowLoaded({ index }) {
+		return this.props.store.getAt(index) ? true : false;
+	}
+
+	loadMoreRows({ startIndex, stopIndex }) {
+		this.props.store.nextPage();
+	}
 	render() {
 		let { store } = this.props;
 		let count = store ? store.count() : 0;
-
+		let remoteRowCount = parseInt(store.total);
 		let idProperty = this.props.idProperty || store.model.idProperty;
+
 		if (count == 0) {
 			return (
 				<div className="m-0 vh-100 row justify-content-center align-items-center">
@@ -251,39 +260,79 @@ class DataList extends React.Component {
 				{({ width, height }) => {
 					return (
 						(
-							<List
-								width={width}
-								height={height - this.props.reduceHeight}
-								rowHeight={this.cache.rowHeight}
-								deferredMeasurementCache={this.cache}
-								rowCount={count}
-								className={`wx-data-list list-inner` + this.props.className}
-								rowRenderer={({ key, index, style, parent }) => {
-									const record = store.getAt(index);
-									const selected = this.state.selection[record.getId()] || this.state.checkedAll ? true : false;
 
-									return (
-										<CellMeasurer
-											key={record.get(idProperty)}
-											cache={this.cache}
-											parent={parent}
-											columnIndex={0}
-											rowIndex={index}
-										>
-											<div
-												onClick={(e) => {
-													this.selectionModel(e, record)
-												}}
-												className={`wrapper-item ${selected ? "item-selected" : ""}`} style={style}>
-												{
-													this.props.displayTpl ? this.props.displayTpl({ key, index, parent, style, record }) : null
-												}
-											</div>
+							<InfiniteLoader
+								isRowLoaded={this.isRowLoaded.bind(this)}
+								loadMoreRows={this.loadMoreRows.bind(this)}
+								rowCount={remoteRowCount}
+								minimumBatchSize={this.props.store.pageSize}
+							>
+								{({ onRowsRendered, registerChild }) => (
 
-										</CellMeasurer>
-									);
-								}}
-							/>
+									<List
+										onRowsRendered={onRowsRendered}
+										ref={registerChild}
+										width={width}
+										height={height - this.props.reduceHeight}
+										rowHeight={this.cache.rowHeight}
+										deferredMeasurementCache={this.cache}
+										rowCount={remoteRowCount}
+										className={`wx-data-list list-inner` + this.props.className}
+										rowRenderer={({ key, index, style, parent }) => {
+
+											const record = store.getAt(index);
+											if (record) {
+												const selected = this.state.selection[record.getId()] || this.state.checkedAll ? true : false;
+												return (
+													<CellMeasurer
+														key={record.get(idProperty)}
+														cache={this.cache}
+														parent={parent}
+														columnIndex={0}
+														rowIndex={index}
+													>
+														<div
+															onClick={(e) => {
+																this.selectionModel(e, record)
+															}}
+															className={`wrapper-item ${selected ? "item-selected" : ""}`} style={style}>
+															{
+																this.props.displayTpl ? this.props.displayTpl({ key, index, parent, style, record }) : null
+															}
+														</div>
+
+													</CellMeasurer>
+												);
+
+											} else {
+												return (
+													<CellMeasurer
+														key={`empty-${index}`}
+														cache={this.cache}
+														parent={parent}
+														columnIndex={0}
+														rowIndex={0}
+													>
+														<div
+															onClick={(e) => {
+																this.selectionModel(e, record)
+															}}
+															className={`wrapper-item `} style={style}>
+															{
+																this.props.displayTplLoading ? this.props.displayTplLoading({ key, index, parent, style, record }) : null
+															}
+														</div>
+													</CellMeasurer>
+												);
+											}
+
+										}}
+									/>
+
+								)}
+							</InfiniteLoader>
+
+
 						)
 					)
 				}}
@@ -293,7 +342,7 @@ class DataList extends React.Component {
 	}
 }
 DataList.defaultProps = {
-
+	autoLoad: true
 };
 
 
