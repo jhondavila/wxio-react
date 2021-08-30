@@ -173,7 +173,7 @@ class DataList extends React.Component {
 				});
 
 			}
-		}else if (this.props.selectionMode === "multiple" && e.ctrlKey) {
+		} else if (this.props.selectionMode === "multiple" && e.ctrlKey) {
 
 			let value = !this.state.selection[row.getId()];
 
@@ -236,10 +236,14 @@ class DataList extends React.Component {
 		let { store } = this.props;
 		let count = store ? store.count() : 0;
 
-		let idProperty =  this.props.idProperty || store.model.idProperty;
-		if(count == 0){
+		let idProperty = this.props.idProperty || store.model.idProperty;
+		if (count == 0) {
 			return (
-				<div>{this.props.msgNoData || "No hay registros"}</div>
+				<div className="m-0 vh-100 row justify-content-center align-items-center">
+					<div className="col-auto p-5 text-center">
+						{this.props.msgNoData || "No hay registros"}
+					</div>
+				</div>
 			)
 		}
 		return (
@@ -268,7 +272,7 @@ class DataList extends React.Component {
 										>
 											<div
 												onClick={(e) => {
-													this.selectionModel(e,  record)
+													this.selectionModel(e, record)
 												}}
 												className={`wrapper-item ${selected ? "item-selected" : ""}`} style={style}>
 												{
