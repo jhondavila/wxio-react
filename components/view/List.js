@@ -234,12 +234,10 @@ class DataList extends React.Component {
 		}
 	}
 	isRowLoaded({ index }) {
-		console.log("isRowLoaded", index, this.props.store.getAt(index) ? true : false)
 		return this.props.store.getAt(index) ? true : false;
 	}
 
 	loadMoreRows({ startIndex, stopIndex }) {
-		console.log("loadMoreRows", startIndex, stopIndex)
 		this.props.store.nextPage();
 	}
 	render() {
