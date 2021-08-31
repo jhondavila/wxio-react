@@ -10,6 +10,7 @@ import {
 import equal from "fast-deep-equal";
 
 import "./styles.scss"
+import { tickStep } from 'd3';
 class DataList extends React.Component {
 
 
@@ -294,6 +295,11 @@ class DataList extends React.Component {
 														<div
 															onClick={(e) => {
 																this.selectionModel(e, record)
+															}}
+															onDoubleClick={(e) => {
+																if (this.props.onDoubleClick) {
+																	this.props.onDoubleClick(e, record)
+																}
 															}}
 															className={`wrapper-item ${selected ? "item-selected" : ""}`} style={style}>
 															{
