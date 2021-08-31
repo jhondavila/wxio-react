@@ -248,7 +248,11 @@ class DataList extends React.Component {
 
 		if (count == 0) {
 			return (
-				<div>{this.props.msgNoData || "No hay registros"}</div>
+				<div className="m-0 vh-100 row justify-content-center align-items-center">
+					<div className="col-auto p-5 text-center">
+						{this.props.msgNoData || "No hay registros"}
+					</div>
+				</div>
 			)
 		}
 		return (
