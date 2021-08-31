@@ -7,7 +7,9 @@ import {
 	CellMeasurerCache,
 } from 'react-virtualized';
 import equal from "fast-deep-equal";
+
 class DataView extends React.Component {
+
 
 
 	constructor(props) {
@@ -72,7 +74,7 @@ class DataView extends React.Component {
 				let total = await this.props.store.total
 				this.setState({
 					myData: data,
-					total : total
+					total: total
 				});
 			} else if (prevProps.store) {
 				this.removeHooks(prevProps.store);
@@ -134,7 +136,6 @@ class DataView extends React.Component {
 			})
 		}
 	}
-
 	render() {
 		let { store } = this.props;
 		let count = store ? store.count() : 0;
@@ -145,7 +146,7 @@ class DataView extends React.Component {
 						(
 							<List
 								width={width}
-								height={height-this.props.reduceHeight}
+								height={height - this.props.reduceHeight}
 								rowHeight={this.cache.rowHeight}
 								deferredMeasurementCache={this.cache}
 								rowCount={count}
@@ -162,7 +163,7 @@ class DataView extends React.Component {
 										>
 											<div className="wrapper-item" style={style}>
 												{
-													this.props.rowRenderer ? this.props.rowRenderer({ key, index, parent, style, record }) : null
+													this.props.displayTpl ? this.props.displayTpl({ key, index, parent, style, record }) : null
 												}
 											</div>
 
@@ -179,7 +180,8 @@ class DataView extends React.Component {
 	}
 }
 DataView.defaultProps = {
-	propertyId: "id"
+	propertyId: "id",
+	reduceHeight: 0
 };
 
 
