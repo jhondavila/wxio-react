@@ -23,7 +23,12 @@ class ButtonImport extends Component {
             let file = files[x];
             if (importer.isExcel(file)) {
                 let { headers, results } = await importer.readerData(file);
-                records = await this.proccess({ headers, results });
+                if (this.props.process) {
+                    records = await this.props.process({ headers, results })
+                } else {
+
+                    records = await this.process({ headers, results });
+                }
                 // let columns = this.props.columns;
                 // columns = header;
                 // data.push(...results);
@@ -42,7 +47,7 @@ class ButtonImport extends Component {
         // console.log(data)
         // console.log(columns)
     }
-    async proccess({ headers, results }) {
+    async process({ headers, results }) {
         let columns = this.props.columns;
         let keys = {}
 

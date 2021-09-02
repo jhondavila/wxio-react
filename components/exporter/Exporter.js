@@ -21,8 +21,11 @@ export class Exporter extends React.Component {
             filename = opts.filename;
         }
 
+        let data;
 
-        let data = [];
+        data = opts.data || [];
+        columns = opts.columns || columns;
+        filename = opts.filename || filename;
 
         if (store) {
             let totalPages = store.getTotalPages();
