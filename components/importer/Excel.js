@@ -162,6 +162,7 @@ class ButtonImport extends Component {
                 onChange={this.onChageUploader.bind(this)}
                 multiple={this.props.multiple}
                 size={this.props.size}
+                trigger={this.props.trigger}
                 text={"text"}
                 accept={"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"}
             >{this.props.children}</Uploader>

@@ -98,7 +98,7 @@ class Uploader extends React.Component {
         if (this.props.disabled) {
             return;
         }
-        
+
         this.input.click();
     }
 }
