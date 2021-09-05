@@ -149,6 +149,17 @@ class PivotGrid extends React.Component {
                 values: result.values.map(i => i),
                 selection: result,
                 filters: result.filters
+            }, () => {
+                if (this.props.remoteMatrix) {
+                    let { columns, rows, values } = this.state.selection;
+                    this.props.store.addExtraParams("matrix", JSON.stringify({
+                        columns: columns,
+                        rows: rows,
+                        values: values
+                    }));
+                    this.props.store.load();
+                }
+
             })
         }).catch(error => {
             console.log(error)
