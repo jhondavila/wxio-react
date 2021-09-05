@@ -55,7 +55,6 @@ class PivotGrid extends React.Component {
             data = this.props.data;
             fields = this.props.fields || [];
         }
-        console.log(fields)
 
         return {
             fields, data
@@ -81,6 +80,13 @@ class PivotGrid extends React.Component {
         });
     }
 
+    onImport() {
+        let { fields, data } = this.initConfig();
+        this.setState({
+            data: data,
+            fields: fields,
+        })
+    }
     componentDidUpdate(prevProps) {
         if (this.props.selection !== prevProps.selection) {
             this.setState({

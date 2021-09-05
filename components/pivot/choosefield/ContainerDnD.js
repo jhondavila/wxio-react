@@ -15,10 +15,10 @@ import { ChooserField } from "./ChooserField"
 // } from '@szhsin/react-menu';
 // import '@szhsin/react-menu/dist/index.css';
 
-import {
-    ControlledMenuTest
-}
-    from '../../../../components/menu-master/src';
+// import {
+//     ControlledMenuTest
+// }
+//     from '../../../../components/menu-master/src';
 
 import {
     ControlledMenu,
@@ -31,9 +31,7 @@ import '@szhsin/react-menu/dist/index.css';
 // import '../../menu-master/src/styles/index.scss';
 
 import "./choosefield.scss";
-import field from '../../Wx/store/field';
 import { drag, tree, utcFormat } from 'd3';
-import Menu from "Wx/components/table/menu";
 import { FilterCfg } from "./filter/FilterCfg"
 let uuid = 0;
 class Container extends React.Component {
@@ -421,7 +419,7 @@ class Container extends React.Component {
                     </ControlledMenu>
 
 
-                    <ControlledMenuTest anchorPoint={this.state.menuFiltersAP} isOpen={this.state.showMenuFilters}
+                    <ControlledMenu anchorPoint={this.state.menuFiltersAP} isOpen={this.state.showMenuFilters}
                         onClose={(e) => {
                             // console.log("menuroot")
                             // this.setState({
@@ -445,7 +443,7 @@ class Container extends React.Component {
                                 })
                             }}
                         />
-                    </ControlledMenuTest>
+                    </ControlledMenu>
 
                     {/* <div className="chooser-fields chooser-availables">
                         {this.state.fields.map((field, index) => {
