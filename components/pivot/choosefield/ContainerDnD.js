@@ -6,7 +6,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { Row, Col } from "react-bootstrap"
 import { ChooserField } from "./ChooserField"
 
-
+import { compose } from "redux";
 // const style = {
 //     width: 400,
 // };
@@ -23,7 +23,9 @@ import { ChooserField } from "./ChooserField"
 import {
     ControlledMenu,
     MenuItem,
-    useMenuState
+    useMenuState,
+    applyStatics,
+    applyHOC
 }
     from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
@@ -34,6 +36,47 @@ import "./choosefield.scss";
 import { drag, tree, utcFormat } from 'd3';
 import { FilterCfg } from "./filter/FilterCfg"
 let uuid = 0;
+applyStatics(MenuItem)(FilterCfg);
+
+
+
+// const presetValue = (WrappedComponent, value) => {
+//     const Enhance = (props) => (
+//         <WrappedComponent {...props} children={value} value={value} />
+//     );
+//     Enhance.displayName = `Enhance${value}`;
+//     return Enhance;
+// };
+
+// const logProps = (WrappedComponent) => {
+//     class Enhance extends React.Component {
+//         componentDidMount(prevProps) {
+//             console.log("[componentDidMount] props: ", this.props);
+//         }
+//         render() {
+//             return <WrappedComponent {...this.props} />;
+//         }
+//     }
+
+//     Enhance.displayName = "logProps";
+//     return Enhance;
+// };
+
+// // Copying react-menu statics using the applyHOC helper
+// const FirstItem = applyHOC(presetValue)(MenuItem, "First");
+
+// // applyStatics creates a composable HOC that can be placed
+// // at the leftmost of a compose utility
+// const composed = compose(applyStatics(MenuItem), logProps, presetValue);
+// const ComposedItem = composed(MenuItem, "Composed");
+
+// // Alternatively, you can call applyHOC on the value
+// // returned from a compose utility
+// const alternativeComposed = compose(logProps, presetValue);
+// const AlternativeItem = applyHOC(alternativeComposed)(MenuItem, "Alternative");
+
+
+
 class Container extends React.Component {
 
     constructor(props) {
@@ -373,6 +416,7 @@ class Container extends React.Component {
         }
 
         // console.log()
+        // debugger
         let filterEdit = {
             dataIndex: options.dataIndex,
             filter: options.data.filter || {},
@@ -400,6 +444,7 @@ class Container extends React.Component {
     }
     render() {
         let filterEdit = this.state.filterEdit || {};
+
         return (
             <DndProvider backend={HTML5Backend}>
                 <div className="chooser-selector d-flex" style={{ height: 400 }}>
@@ -421,7 +466,7 @@ class Container extends React.Component {
 
                     <ControlledMenu anchorPoint={this.state.menuFiltersAP} isOpen={this.state.showMenuFilters}
                         onClose={(e) => {
-                            // console.log("menuroot")
+                            console.trace(e)
                             // this.setState({
                             //     showMenuFilters: false
                             // })
@@ -443,6 +488,10 @@ class Container extends React.Component {
                                 })
                             }}
                         />
+                        {/* <FirstItem />
+                        <ComposedItem className="composed" />
+                        <AlternativeItem className="alternative" />
+                        <MenuItem>Regular item</MenuItem> */}
                     </ControlledMenu>
 
                     {/* <div className="chooser-fields chooser-availables">
@@ -487,7 +536,7 @@ class Container extends React.Component {
                                 <div>
                                     <span>
                                         Filtros
-                                    <i className="fas fa-filter icon-title"></i>
+                                        <i className="fas fa-filter icon-title"></i>
                                     </span>
                                 </div>
 

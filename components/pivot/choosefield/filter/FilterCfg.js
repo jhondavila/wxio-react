@@ -51,6 +51,8 @@ export class FilterCfg extends React.Component {
     }
 
     componentDidUpdate(prevProps){
+
+        console.log(prevProps)
         if(prevProps.value !== this.props.value){
                 console.log(this.props.value)
         }
@@ -62,6 +64,7 @@ export class FilterCfg extends React.Component {
         }
     }
     initFilter(){
+        console.log("initFilter")
         if(this.props.value && !this.props.value.type){
             this.setState({
                 checkedAll : true

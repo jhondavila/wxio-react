@@ -61,14 +61,28 @@ class PivotGrid extends React.Component {
         }
     }
     async componentDidMount() {
-        // if (this.props.store) {
-        //     // console.log(this.props.store);
-        //     // console.log(this.props.store.getData())
-        //     let data = this.props.store.getData();
-        //     this.setState({
-        //         data: data
-        //     });
-        // }
+        if (this.props.store) {
+            if (this.props.autoLoad) {
+
+                if (this.props.remoteMatrix) {
+
+                    let { columns, rows, values } = this.state.selection;
+
+                    this.props.store.addExtraParams("matrix", JSON.stringify({
+                        columns: columns,
+                        rows: rows,
+                        values: values
+                    }))
+                }
+                this.props.store.load();
+            }
+            //     // console.log(this.props.store);
+            //     // console.log(this.props.store.getData())
+            //     let data = this.props.store.getData();
+            //     this.setState({
+            //         data: data
+            //     });
+        }
     }
 
     onStoreDataChanged() {
