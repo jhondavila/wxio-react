@@ -5,7 +5,7 @@ import { PivotData, aggregators, spanSize, redColorScaleGenerator, } from './Uti
 
 // helper function for setting row/col-span in pivotTableRenderer
 
-
+import moment from 'moment';
 
 // function makeRenderer(opts = {}) {
 class TableRenderer extends React.PureComponent {
@@ -202,7 +202,10 @@ class TableRenderer extends React.PureComponent {
                     return null;
                   }
 
-
+                  // console.log(txt)
+                  if (txt instanceof moment) {
+                    txt = txt.format("DD/MM/yyyy")
+                  }
 
                   return (
                     <th
@@ -366,6 +369,11 @@ class TableRenderer extends React.PureComponent {
                     } else {
                       // console.log(`f : ${i}, c: ${j}, span: ${x}`)
                     }
+
+                    if (txt instanceof moment) {
+                      txt = txt.format("DD/MM/yyyy")
+                    }
+
                     return (
                       <th
                         key={`rowKeyLabel${i}-${j}`}
