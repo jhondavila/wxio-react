@@ -62,18 +62,20 @@ class PivotGrid extends React.Component {
     }
     async componentDidMount() {
         if (this.props.store) {
+
+            if (this.props.remoteMatrix) {
+
+                let { columns, rows, values } = this.state.selection;
+
+                this.props.store.addExtraParams("matrix", JSON.stringify({
+                    columns: columns,
+                    rows: rows,
+                    values: values
+                }))
+            }
+
             if (this.props.autoLoad) {
 
-                if (this.props.remoteMatrix) {
-
-                    let { columns, rows, values } = this.state.selection;
-
-                    this.props.store.addExtraParams("matrix", JSON.stringify({
-                        columns: columns,
-                        rows: rows,
-                        values: values
-                    }))
-                }
                 this.props.store.load();
             }
             //     // console.log(this.props.store);
@@ -128,8 +130,8 @@ class PivotGrid extends React.Component {
             if (this.props.store) {
                 let model = this.props.store.model;
                 let labels = this.props.labels || {};
-                    let field = model.fields[i.dataIndex];
-                    i.text = labels[field.name] || field.text || field.name;
+                let field = model.fields[i.dataIndex];
+                i.text = labels[field.name] || field.text || field.name;
             }
         })
         return {
@@ -166,7 +168,10 @@ class PivotGrid extends React.Component {
                         rows: rows,
                         values: values
                     }));
-                    this.props.store.load();
+
+                    if(this.props.autoLoad){
+                        this.props.store.load();
+                    }
                 }
 
             })
