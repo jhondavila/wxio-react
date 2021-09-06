@@ -42,12 +42,12 @@ class PivotGrid extends React.Component {
 
             let model = this.props.store.model;
             let labels = this.props.labels || {};
-
             for (let fieldKey in model.fields) {
                 let field = model.fields[fieldKey];
+
                 fields.push({
                     dataIndex: field.name,
-                    text: labels[field.name] || field.name || field.text,
+                    text: labels[field.name] || field.text || field.name,
                 });
             }
 
@@ -123,6 +123,15 @@ class PivotGrid extends React.Component {
         let rows = selection.rows ? selection.rows : [];
         let filters = selection.filters ? selection.filters : [];
 
+
+        values.forEach(i => {
+            if (this.props.store) {
+                let model = this.props.store.model;
+                let labels = this.props.labels || {};
+                    let field = model.fields[i.dataIndex];
+                    i.text = labels[field.name] || field.text || field.name;
+            }
+        })
         return {
             columns: columns,
             rows: rows,
@@ -260,7 +269,7 @@ PivotGrid.defaultProps = {
     selection: {},
     localFilters: true,
     remoteFilters: false,
-    configButton : true
+    configButton: true
     // fields: []
 };
 

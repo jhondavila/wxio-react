@@ -267,7 +267,7 @@ class TableRenderer extends React.PureComponent {
               }
               {
                 valAttrs.map((val, valIndex) => {
-                  let dataIndex = val.dataIndex || val;
+                  let dataIndex =val.text || val.dataIndex || val;
                   return (
 
                     <th
@@ -295,7 +295,9 @@ class TableRenderer extends React.PureComponent {
               }
               {colKeys.map(function (colKey, i) {
                 return vals.map(val => {
-                  let dataIndex = val.dataIndex || val;
+                  let dataIndex = val.text || val.dataIndex || val;
+
+                  
                   return (
                     <th
                       className="pvtColLabel"
@@ -309,7 +311,7 @@ class TableRenderer extends React.PureComponent {
               })}
               {
                 valAttrs.map((val, valIndex) => {
-                  let dataIndex = val.dataIndex || val;
+                  let dataIndex = val.text || val.dataIndex || val;
                   return (
 
                     <th
