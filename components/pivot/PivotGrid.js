@@ -214,9 +214,13 @@ class PivotGrid extends React.Component {
                 {
                     !noConfig ?
                         <>
-                            <Row className="mx-0" style={{ left: 0 }}>
-                                <Button size="sm" onClick={this.openConfig.bind(this)}><i className="far fa-cog"></i></Button>
-                            </Row>
+                            {
+                                this.props.configButton &&
+                                <Row className="mx-0" style={{ left: 0 }}>
+                                    <Button size="sm" onClick={this.openConfig.bind(this)}><i className="far fa-cog"></i></Button>
+                                </Row>
+                            }
+
                             <Row className="mx-0">
                                 <TableRenderers.Table
                                     ref={c => this.table = c}
@@ -255,7 +259,8 @@ PivotGrid.defaultProps = {
     // data: [],
     selection: {},
     localFilters: true,
-    remoteFilters: false
+    remoteFilters: false,
+    configButton : true
     // fields: []
 };
 
