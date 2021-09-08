@@ -5,6 +5,7 @@ import Handlebars from "handlebars";
 let propToString = Object.prototype.toString;
 
 class Utils {
+    i18next = null;
     checkJSONParse(value) {
         if (typeof value === "string") {
             return JSON.parse(value);
@@ -103,7 +104,7 @@ class Utils {
             return false;
         }
     }
- 
+
 
     urlJoin(basePath) {
         if (basePath === "./") {
@@ -163,13 +164,18 @@ class Utils {
     }
 
 
-    
+
     // tOpts({ space, t, lan }) {
     //     return i18next.t(`namespace1:${text}`)
-    // }
+    // }    
+    setI18next(i18next){
+        this.i18next = i18next;
+    }
+    t(text, opts) {
+        return this.i18next.t(`${text}`, { ns: "namespace1", ...opts })
+    }
 
 
-  
     capitalize(str) {
         if (str) {
             str = str.charAt(0).toUpperCase() + str.substr(1);
@@ -283,7 +289,7 @@ class Utils {
     format = (...args) => {
 
 
-        
+
         let params = Array.prototype.slice.call(args, 1);
         let regexp = /{[0-9]*}/gmi;
         if (typeof params[0] == "object") {
@@ -403,7 +409,7 @@ class Utils {
         }
     }
 
-   
+
 }
 
 
