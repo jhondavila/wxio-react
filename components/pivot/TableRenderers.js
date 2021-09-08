@@ -544,8 +544,8 @@ TableRenderer.defaultProps = PivotData.defaultProps;
 TableRenderer.propTypes = PivotData.propTypes;
 TableRenderer.defaultProps.tableColorScaleGenerator = redColorScaleGenerator;
 TableRenderer.defaultProps.tableOptions = {};
-TableRenderer.propTypes.tableColorScaleGenerator = PropTypes.func;
-TableRenderer.propTypes.tableOptions = PropTypes.object;
+//TableRenderer.propTypes.tableColorScaleGenerator = PropTypes.func;
+//TableRenderer.propTypes.tableOptions = PropTypes.object;
 //   return TableRenderer;
 // }
 
