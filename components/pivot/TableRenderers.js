@@ -185,7 +185,7 @@ class TableRenderer extends React.PureComponent {
     // let subTotalRows = this.props.subTotalRows;
     let collapseColKeys = this.props.collapseColKeys;
     return (
-      <table ref={c => this.tableNode = c} className={`pvtTable ${vals.length === 0 && "pvtTable-no-vals"}`}>
+      <table  border='1px' ref={c => this.tableNode = c} className={`pvtTable ${vals.length === 0 && "pvtTable-no-vals"}`}>
         <thead>
           {colAttrs.map(function (c, j) {
             // debugger
