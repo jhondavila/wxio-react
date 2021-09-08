@@ -169,7 +169,7 @@ class PivotGrid extends React.Component {
                         values: values
                     }));
 
-                    if(this.props.autoLoad){
+                    if (this.props.autoLoad) {
                         this.props.store.load();
                     }
                 }
@@ -220,6 +220,10 @@ class PivotGrid extends React.Component {
             collapseRowKeys: collapseRowKeys
         })
     }
+
+    downloadTable() {
+        this.table.downloadTable();
+    }
     render() {
         let noConfig = (!this.state.columns.length && !this.state.rows.length && !this.state.values.length);
         return (
@@ -232,6 +236,12 @@ class PivotGrid extends React.Component {
                                 this.props.configButton &&
                                 <Row className="mx-0" style={{ left: 0 }}>
                                     <Button size="sm" onClick={this.openConfig.bind(this)}><i className="far fa-cog"></i></Button>
+                                </Row>
+                            }
+                              {
+                                this.props.downloadButton &&
+                                <Row className="mx-0" style={{ left: 0 }}>
+                                    <Button size="sm" onClick={this.downloadTable.bind(this)}><i className="far fa-download"></i></Button>
                                 </Row>
                             }
 

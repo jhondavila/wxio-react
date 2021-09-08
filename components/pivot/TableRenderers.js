@@ -11,6 +11,39 @@ import moment from 'moment';
 class TableRenderer extends React.PureComponent {
 
 
+  downloadTable() {
+    var downloadLink;
+    var dataType = 'application/vnd.ms-excel';
+    var tableSelect = this.tableNode;
+
+    // debugger
+    var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+
+    // Specify file name
+    let filename = 'file.xls';
+
+    // Create download link element
+    downloadLink = document.createElement("a");
+
+    document.body.appendChild(downloadLink);
+
+    if (navigator.msSaveOrOpenBlob) {
+      var blob = new Blob(['ufeff', tableHTML], {
+        type: dataType
+      });
+      navigator.msSaveOrOpenBlob(blob, filename);
+    } else {
+      // Create a link to the file
+      downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+
+      // Setting the file name
+      downloadLink.download = filename;
+
+      //triggering the function
+      downloadLink.click();
+    }
+  }
+
   render() {
     // debugger
     // 
@@ -152,7 +185,7 @@ class TableRenderer extends React.PureComponent {
     // let subTotalRows = this.props.subTotalRows;
     let collapseColKeys = this.props.collapseColKeys;
     return (
-      <table className={`pvtTable ${vals.length === 0 && "pvtTable-no-vals"}`}>
+      <table ref={c => this.tableNode = c} className={`pvtTable ${vals.length === 0 && "pvtTable-no-vals"}`}>
         <thead>
           {colAttrs.map(function (c, j) {
             // debugger
@@ -267,7 +300,7 @@ class TableRenderer extends React.PureComponent {
               }
               {
                 valAttrs.map((val, valIndex) => {
-                  let dataIndex =val.text || val.dataIndex || val;
+                  let dataIndex = val.text || val.dataIndex || val;
                   return (
 
                     <th
@@ -297,7 +330,7 @@ class TableRenderer extends React.PureComponent {
                 return vals.map(val => {
                   let dataIndex = val.text || val.dataIndex || val;
 
-                  
+
                   return (
                     <th
                       className="pvtColLabel"
