@@ -3,7 +3,9 @@ import { ModalChooseField } from "./choosefield"
 import TableRenderers from "./TableRenderers"
 import { Button, Row } from "react-bootstrap"
 import PropTypes from 'prop-types';
+import { Store } from "../../store"
 import "./pivot.scss"
+import moment from 'moment';
 class PivotGrid extends React.Component {
     constructor(opts) {
         super(opts);
@@ -224,8 +226,62 @@ class PivotGrid extends React.Component {
     downloadTable() {
         this.table.downloadTable();
     }
+    doubleClickCell(opts) {
+
+        if (!this.props.doubleClickCell) {
+            return;
+        }
+        if (!this.props.store) {
+
+            this.props.doubleClickCell(opts);
+            return;
+        }
+        let store = this.props.store;
+        let model = store.model;
+        // 
+
+
+        let proxy = Object.assign({}, this.props.store.proxy);
+        delete proxy.store;
+
+
+        let filters = opts.filters || {};
+
+        let collectionStore = new Store({
+            model: model,
+            proxy: proxy
+        });
+
+
+
+        for (let p in filters) {
+            let value = filters[p];
+            let property = p;
+            let field = model.fields[property];
+
+            value = field && field.serialize ? field.serialize(value) : value;
+
+            if (field.type == "date") {
+                collectionStore.filter({
+                    type: "between",
+                    property: property,
+                    start: value,
+                    end: value
+                });
+            } else {
+                collectionStore.filter(property, value);
+            }
+        }
+
+
+        this.props.doubleClickCell({
+            ...opts,
+            store: collectionStore
+        });
+    }
     render() {
         let noConfig = (!this.state.columns.length && !this.state.rows.length && !this.state.values.length);
+        let model = this.props.store && this.props.store.model;
         return (
 
             <div className="">
@@ -238,7 +294,7 @@ class PivotGrid extends React.Component {
                                     <Button size="sm" onClick={this.openConfig.bind(this)}><i className="far fa-cog"></i></Button>
                                 </Row>
                             }
-                              {
+                            {
                                 this.props.downloadButton &&
                                 <Row className="mx-0" style={{ left: 0 }}>
                                     <Button size="sm" onClick={this.downloadTable.bind(this)}><i className="far fa-download"></i></Button>
@@ -252,6 +308,7 @@ class PivotGrid extends React.Component {
                                     cols={this.state.columns}
                                     rows={this.state.rows}
                                     vals={this.state.values}
+                                    model={model}
                                     subTotalCols={this.props.subTotalCols}
                                     subTotalRows={this.props.subTotalRows}
                                     collapseColKeys={this.state.collapseColKeys}
@@ -260,6 +317,9 @@ class PivotGrid extends React.Component {
                                     onExpandCol={this.onExpandCol.bind(this)}
                                     onCollapseRow={this.onCollapseRow.bind(this)}
                                     onExpandRow={this.onExpandRow.bind(this)}
+                                    tableOptions={{
+                                        clickCallback: this.props.doubleClickCell ? this.doubleClickCell.bind(this) : null
+                                    }}
                                 ></TableRenderers.Table>
                             </Row>
 
