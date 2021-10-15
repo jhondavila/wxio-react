@@ -1,0 +1,120 @@
+.wx-chart {
+    // width: 700px;
+    // height: 500px;
+    display: inline-block;
+    margin: auto;
+    // background-color: #2f4a6d;
+}
+
+.wx-chart.wx-indicator {
+    color: gray;
+    // position: relative;
+    .goal-title {
+        // color: gray;
+        font-size: 20px;
+        line-height: 1;
+    }
+    .goal {
+        position: relative;
+    }
+    .goal-value {
+        // color: gray;
+        font-size: 20px;
+        line-height: 1;
+    }
+    .current-value {
+        font-size: 40px;
+    }
+    .legend-container {
+        font-size: 12px;
+        .item-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+    }
+    .separator {
+        left: 0px;
+        top: 50%;
+        width: 1px;
+        position: absolute;
+        height: 80%;
+        border-style: dashed;
+        border-width: 0.5px;
+        border-color: rgba(0, 0, 0, 0.5);
+        transform: translate(0px, -50%);
+    }
+}
+// svg {
+//     // width: 100%;
+//     // height: 100%;
+// }
+
+// .bar {
+//     fill: #80cbc4;
+// }
+
+// text {
+//     // font-size: 12px;
+//     // fill: #fff;
+// }
+
+// path {
+//     // stroke: gray;
+// }
+
+line {
+    stroke: gray;
+}
+
+// line#limit {
+//     stroke: #fed966;
+//     stroke-width: 3;
+//     stroke-dasharray: 3 6;
+// }
+
+.grid path {
+    stroke-width: 0;
+}
+
+.grid .tick line {
+    stroke: #9faaae;
+    stroke-opacity: 0.3;
+}
+
+// text.divergence {
+//     // font-size: 12px;
+//     fill: #2f4a6d;
+// }
+
+text.value {
+    // font-size: 12px;
+}
+
+// text.title {
+//     // font-size: 22px;
+//     font-weight: 600;
+// }
+
+// text.label {
+//     // font-size: 12px;
+//     font-weight: 400;
+// }
+
+// text.source {
+//     // font-size: 10px;
+// }
+
+// svg {
+//     // font: 10px sans-serif;
+//   }
+//   .bar rect {
+//     // fill: steelblue;
+//     // shape-rendering: crispEdges;
+//   }
+
+//   .line {
+//     // fill: none;
+//     // stroke: purple;
+//     // stroke-width: 1.5px;
+//   }
