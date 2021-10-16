@@ -22,9 +22,10 @@ class ButtonImport extends Component {
         for (let x = 0; x < files.length; x++) {
             let file = files[x];
             if (importer.isExcel(file)) {
+
                 let { headers, results } = await importer.readerData(file);
                 if (this.props.process) {
-                    records = await this.props.process({ headers, results })
+                    records = await this.props.process({ headers, results, file: file })
                 } else {
 
                     records = await this.process({ headers, results });
