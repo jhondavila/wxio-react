@@ -172,7 +172,11 @@ class Utils {
         this.i18next = i18next;
     }
     t(text, opts) {
-        return this.i18next.t(`${text}`, { ns: "namespace1", ...opts })
+        if(this.i18next){
+            return this.i18next.t(`${text}`, { ns: "namespace1", ...opts })
+        }else{
+            return text;
+        }
     }
 
 
