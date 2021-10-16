@@ -3,7 +3,9 @@ import { ModalChooseField } from "./choosefield"
 import TableRenderers from "./TableRenderers"
 import { Button, Row } from "react-bootstrap"
 import PropTypes from 'prop-types';
+import { Store } from "../../store"
 import "./pivot.scss"
+import moment from 'moment';
 class PivotGrid extends React.Component {
     constructor(opts) {
         super(opts);
@@ -42,12 +44,12 @@ class PivotGrid extends React.Component {
 
             let model = this.props.store.model;
             let labels = this.props.labels || {};
-
             for (let fieldKey in model.fields) {
                 let field = model.fields[fieldKey];
+
                 fields.push({
                     dataIndex: field.name,
-                    text: labels[field.name] || field.name || field.text,
+                    text: labels[field.name] || field.text || field.name,
                 });
             }
 
@@ -55,21 +57,36 @@ class PivotGrid extends React.Component {
             data = this.props.data;
             fields = this.props.fields || [];
         }
-        console.log(fields)
 
         return {
             fields, data
         }
     }
     async componentDidMount() {
-        // if (this.props.store) {
-        //     // console.log(this.props.store);
-        //     // console.log(this.props.store.getData())
-        //     let data = this.props.store.getData();
-        //     this.setState({
-        //         data: data
-        //     });
-        // }
+        if (this.props.store) {
+
+            if (this.props.remoteMatrix) {
+
+                let { columns, rows, values } = this.state.selection;
+
+                this.props.store.addExtraParams("matrix", JSON.stringify({
+                    columns: columns,
+                    rows: rows,
+                    values: values
+                }))
+            }
+
+            if (this.props.autoLoad) {
+
+                this.props.store.load();
+            }
+            //     // console.log(this.props.store);
+            //     // console.log(this.props.store.getData())
+            //     let data = this.props.store.getData();
+            //     this.setState({
+            //         data: data
+            //     });
+        }
     }
 
     onStoreDataChanged() {
@@ -81,6 +98,13 @@ class PivotGrid extends React.Component {
         });
     }
 
+    onImport() {
+        let { fields, data } = this.initConfig();
+        this.setState({
+            data: data,
+            fields: fields,
+        })
+    }
     componentDidUpdate(prevProps) {
         if (this.props.selection !== prevProps.selection) {
             this.setState({
@@ -103,6 +127,15 @@ class PivotGrid extends React.Component {
         let rows = selection.rows ? selection.rows : [];
         let filters = selection.filters ? selection.filters : [];
 
+
+        values.forEach(i => {
+            if (this.props.store) {
+                let model = this.props.store.model;
+                let labels = this.props.labels || {};
+                let field = model.fields[i.dataIndex];
+                i.text = labels[field.name] || field.text || field.name;
+            }
+        })
         return {
             columns: columns,
             rows: rows,
@@ -129,6 +162,20 @@ class PivotGrid extends React.Component {
                 values: result.values.map(i => i),
                 selection: result,
                 filters: result.filters
+            }, () => {
+                if (this.props.remoteMatrix) {
+                    let { columns, rows, values } = this.state.selection;
+                    this.props.store.addExtraParams("matrix", JSON.stringify({
+                        columns: columns,
+                        rows: rows,
+                        values: values
+                    }));
+
+                    if (this.props.autoLoad) {
+                        this.props.store.load();
+                    }
+                }
+
             })
         }).catch(error => {
             console.log(error)
@@ -175,17 +222,85 @@ class PivotGrid extends React.Component {
             collapseRowKeys: collapseRowKeys
         })
     }
+
+    downloadTable() {
+        this.table.downloadTable();
+    }
+    doubleClickCell(opts) {
+
+        if (!this.props.doubleClickCell) {
+            return;
+        }
+        if (!this.props.store) {
+
+            this.props.doubleClickCell(opts);
+            return;
+        }
+        let store = this.props.store;
+        let model = store.model;
+        // 
+
+
+        let proxy = Object.assign({}, this.props.store.proxy);
+        delete proxy.store;
+
+
+        let filters = opts.filters || {};
+
+        let collectionStore = new Store({
+            model: model,
+            proxy: proxy
+        });
+
+
+
+        for (let p in filters) {
+            let value = filters[p];
+            let property = p;
+            let field = model.fields[property];
+
+            value = field && field.serialize ? field.serialize(value) : value;
+
+            if (field.type == "date") {
+                collectionStore.filter({
+                    type: "between",
+                    property: property,
+                    start: value,
+                    end: value
+                });
+            } else {
+                collectionStore.filter(property, value);
+            }
+        }
+
+
+        this.props.doubleClickCell({
+            ...opts,
+            store: collectionStore
+        });
+    }
     render() {
         let noConfig = (!this.state.columns.length && !this.state.rows.length && !this.state.values.length);
+        let model = this.props.store && this.props.store.model;
         return (
 
             <div className="">
                 {
                     !noConfig ?
                         <>
-                            <Row className="mx-0" style={{ left: 0 }}>
-                                <Button size="sm" onClick={this.openConfig.bind(this)}><i className="far fa-cog"></i></Button>
-                            </Row>
+                            {
+                                this.props.configButton &&
+                                <Row className="mx-0" style={{ left: 0 }}>
+                                    <Button size="sm" onClick={this.openConfig.bind(this)}><i className="far fa-cog"></i></Button>
+                                </Row>
+                            }
+                            {
+                                this.props.downloadButton &&
+                                <Row className="mx-0" style={{ left: 0 }}>
+                                    <Button size="sm" onClick={this.downloadTable.bind(this)}><i className="far fa-download"></i></Button>
+                                </Row>
+                            }
+
                             <Row className="mx-0">
                                 <TableRenderers.Table
                                     ref={c => this.table = c}
@@ -193,6 +308,7 @@ class PivotGrid extends React.Component {
                                     cols={this.state.columns}
                                     rows={this.state.rows}
                                     vals={this.state.values}
+                                    model={model}
                                     subTotalCols={this.props.subTotalCols}
                                     subTotalRows={this.props.subTotalRows}
                                     collapseColKeys={this.state.collapseColKeys}
@@ -201,6 +317,9 @@ class PivotGrid extends React.Component {
                                     onExpandCol={this.onExpandCol.bind(this)}
                                     onCollapseRow={this.onCollapseRow.bind(this)}
                                     onExpandRow={this.onExpandRow.bind(this)}
+                                    tableOptions={{
+                                        clickCallback: this.props.doubleClickCell ? this.doubleClickCell.bind(this) : null
+                                    }}
                                 ></TableRenderers.Table>
                             </Row>
 
@@ -224,7 +343,8 @@ PivotGrid.defaultProps = {
     // data: [],
     selection: {},
     localFilters: true,
-    remoteFilters: false
+    remoteFilters: false,
+    configButton: true
     // fields: []
 };
 

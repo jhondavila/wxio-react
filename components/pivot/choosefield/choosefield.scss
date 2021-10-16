@@ -1,5 +1,5 @@
-@import "node_modules/bootstrap/scss/mixins/breakpoints";
-@import "../../../css/_brackpoint-variables";
+// @import "node_modules/bootstrap/scss/mixins/breakpoints";
+// @import "../../../css/_brackpoint-variables";
 
 .chooser-selector {
     background-color: white;
@@ -57,11 +57,11 @@
     }
 }
 
-@include media-breakpoint-up(sm) {
+// @include media-breakpoint-up(sm) {
     .wx-modal-choosefield-dnd {
         max-width: 700px;
     }
-}
+// }
 
 .chooser-filter-condition {
     background-color: white;

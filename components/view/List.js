@@ -20,6 +20,7 @@ class DataList extends React.Component {
 			myData: [],
 			selection: {},
 			loadingData: true,
+			checkedAll: false
 		};
 
 		this.cache = React.createRef();
@@ -240,6 +241,16 @@ class DataList extends React.Component {
 
 	loadMoreRows({ startIndex, stopIndex }) {
 		this.props.store.nextPage();
+	}
+	selectAll() {
+		this.setState({
+			checkedAll: true,
+			selection: {}
+		}, () => {
+
+
+			this.selectionChange();
+		})
 	}
 	render() {
 		let { store } = this.props;

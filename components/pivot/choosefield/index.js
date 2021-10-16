@@ -1,8 +1,8 @@
-import createConfirmation from "../../modal/createConfirmation";
+import { createModal } from "../../modal";
 import Modal from "./Modal";
 import ContainerDnD from "./ContainerDnD";
 
- const ModalChooseField = createConfirmation(Modal);
+const ModalChooseField = createModal(Modal);
 
 export {
     ContainerDnD,

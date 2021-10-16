@@ -5,11 +5,44 @@ import { PivotData, aggregators, spanSize, redColorScaleGenerator, } from './Uti
 
 // helper function for setting row/col-span in pivotTableRenderer
 
-
+import moment from 'moment';
 
 // function makeRenderer(opts = {}) {
 class TableRenderer extends React.PureComponent {
 
+
+  downloadTable() {
+    var downloadLink;
+    var dataType = 'application/vnd.ms-excel';
+    var tableSelect = this.tableNode;
+
+    // debugger
+    var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+
+    // Specify file name
+    let filename = 'file.xls';
+
+    // Create download link element
+    downloadLink = document.createElement("a");
+
+    document.body.appendChild(downloadLink);
+
+    if (navigator.msSaveOrOpenBlob) {
+      var blob = new Blob(['ufeff', tableHTML], {
+        type: dataType
+      });
+      navigator.msSaveOrOpenBlob(blob, filename);
+    } else {
+      // Create a link to the file
+      downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+
+      // Setting the file name
+      downloadLink.download = filename;
+
+      //triggering the function
+      downloadLink.click();
+    }
+  }
 
   render() {
     // debugger
@@ -120,9 +153,10 @@ class TableRenderer extends React.PureComponent {
     //   }
     // }
 
+    // console.log(this.props.tableOptions)
     const getClickHandler =
       this.props.tableOptions && this.props.tableOptions.clickCallback
-        ? (value, rowValues, colValues) => {
+        ? (e, value, rowValues, colValues) => {
           const filters = {};
           for (const i of Object.keys(colAttrs || {})) {
             const attr = colAttrs[i];
@@ -136,13 +170,15 @@ class TableRenderer extends React.PureComponent {
               filters[attr] = rowValues[i];
             }
           }
-          return e =>
-            this.props.tableOptions.clickCallback(
+          // return e =>
+          this.props.tableOptions.clickCallback(
+            {
               e,
               value,
               filters,
               pivotData
-            );
+            }
+          );
         }
         : null;
 
@@ -152,7 +188,7 @@ class TableRenderer extends React.PureComponent {
     // let subTotalRows = this.props.subTotalRows;
     let collapseColKeys = this.props.collapseColKeys;
     return (
-      <table className={`pvtTable ${vals.length === 0 && "pvtTable-no-vals"}`}>
+      <table border='1px' ref={c => this.tableNode = c} className={`pvtTable ${vals.length === 0 && "pvtTable-no-vals"}`}>
         <thead>
           {colAttrs.map(function (c, j) {
             // debugger
@@ -202,7 +238,10 @@ class TableRenderer extends React.PureComponent {
                     return null;
                   }
 
-
+                  // console.log(txt)
+                  if (txt instanceof moment) {
+                    txt = txt.format("DD/MM/yyyy")
+                  }
 
                   return (
                     <th
@@ -264,7 +303,7 @@ class TableRenderer extends React.PureComponent {
               }
               {
                 valAttrs.map((val, valIndex) => {
-                  let dataIndex = val.dataIndex || val;
+                  let dataIndex = val.text || val.dataIndex || val;
                   return (
 
                     <th
@@ -292,7 +331,9 @@ class TableRenderer extends React.PureComponent {
               }
               {colKeys.map(function (colKey, i) {
                 return vals.map(val => {
-                  let dataIndex = val.dataIndex || val;
+                  let dataIndex = val.text || val.dataIndex || val;
+
+
                   return (
                     <th
                       className="pvtColLabel"
@@ -306,7 +347,7 @@ class TableRenderer extends React.PureComponent {
               })}
               {
                 valAttrs.map((val, valIndex) => {
-                  let dataIndex = val.dataIndex || val;
+                  let dataIndex = val.text || val.dataIndex || val;
                   return (
 
                     <th
@@ -366,6 +407,11 @@ class TableRenderer extends React.PureComponent {
                     } else {
                       // console.log(`f : ${i}, c: ${j}, span: ${x}`)
                     }
+
+                    if (txt instanceof moment) {
+                      txt = txt.format("DD/MM/yyyy")
+                    }
+
                     return (
                       <th
                         key={`rowKeyLabel${i}-${j}`}
@@ -415,10 +461,10 @@ class TableRenderer extends React.PureComponent {
                         <td
                           className={`pvtVal ${clsRow} ${clsCol}`}
                           key={`pvtVal${i}-${j}-${val.dataIndex || val}-${val.aggregator}`}
-                          onClick={() => {
+                          onDoubleClick={(e) => {
                             // console.log(rowKey, colKey);
                             getClickHandler &&
-                              getClickHandler(aggregator.value(), rowKey, colKey)
+                              getClickHandler(e,aggregator.value(), rowKey, colKey)
                           }}
                           style={valueCellColors(
                             rowKey,
@@ -443,10 +489,10 @@ class TableRenderer extends React.PureComponent {
                         key={`pvtTotal-${val.dataIndex || val}-${val.aggregator}`}
 
                         className="pvtTotal"
-                        onClick={
+                        onDoubleClick={(e) => {
                           getClickHandler &&
-                          getClickHandler(totalAggregator.value(), rowKey, [null])
-                        }
+                            getClickHandler(e,totalAggregator.value(), rowKey, [null])
+                        }}
                         style={colTotalColors(totalAggregator.value())}
                       >
                         {totalAggregator.format(totalAggregator.value())}
@@ -487,10 +533,10 @@ class TableRenderer extends React.PureComponent {
                   <td
                     className={`pvtTotal ${colKey.type === "subtotal" ? "wx-col-subtotal" : ""}`}
                     key={`total-${i}-${val.dataIndex || val}-${val.aggregator}`}
-                    onClick={
+                    onDoubleClick={(e) => {
                       getClickHandler &&
-                      getClickHandler(totalAggregator[valIndex].value(), [null], colKey)
-                    }
+                        getClickHandler(e,totalAggregator[valIndex].value(), [null], colKey)
+                    }}
                     style={rowTotalColors(totalAggregator[valIndex].value())}
                   >
                     {totalAggregator[valIndex].format(totalAggregator[valIndex].value())}
@@ -510,10 +556,10 @@ class TableRenderer extends React.PureComponent {
 
                   <td
                     key={`pvtGrandTotal-${val.dataIndex || val}-${val.aggregator}`}
-                    onClick={
+                    onDoubleClick={(e) => {
                       getClickHandler &&
-                      getClickHandler(grandTotalAggregator.value(), [null], [null])
-                    }
+                        getClickHandler(e,grandTotalAggregator[valIndex].value(), [null], [null])
+                    }}
                     className="pvtGrandTotal"
                   >
 
@@ -534,9 +580,9 @@ TableRenderer.defaultProps = PivotData.defaultProps;
 TableRenderer.propTypes = PivotData.propTypes;
 TableRenderer.defaultProps.tableColorScaleGenerator = redColorScaleGenerator;
 TableRenderer.defaultProps.tableOptions = {};
-TableRenderer.propTypes.tableColorScaleGenerator = PropTypes.func;
-TableRenderer.propTypes.tableOptions = PropTypes.object;
-//   return TableRenderer;
+//TableRenderer.propTypes.tableColorScaleGenerator = PropTypes.func;
+// TableRenderer.propTypes.tableOptions = PropTypes.object;
+// return TableRenderer;
 // }
 
 // class TSVExportRenderer extends React.PureComponent {

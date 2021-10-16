@@ -14,9 +14,18 @@ class Importer {
                 const headers = this.getHeaderRow(worksheet)
                 const results = XLSX.utils.sheet_to_json(worksheet, {
                     raw: false, cellDates: true,
+                    cellStyles : true,
+                    // sheetRows : true,
+                    // cellHTML : true,
+                    // cellNF : true
+
+
                     // dateNF: 'yyyy-mm-dd'
                 })
-                console.log(results)
+
+                // console.log("headers =>",worksheet)
+                // console.log("headers =>",headers)
+                // console.log("results =>",results)
                 // this.generateData({ header, results })
                 this.loading = false;
                 resolve({ headers, results });

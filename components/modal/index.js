@@ -1,4 +1,4 @@
-import createModal from "./createModal"
+import createModalCt from "./createModal"
 
 
 import Confirm from "./Confirm";
@@ -11,17 +11,17 @@ import Notification from "./Notification";
 import Marquee from "./Marquee";
 import PreviewPhoto from "./PreviewPhoto";
 import PreviewVideo from "./PreviewVideo";
-export const confirm = createModal(Confirm);
-export const msgConfirm = createModal(Confirm);
+export const confirm = createModalCt(Confirm);
+export const msgConfirm = createModalCt(Confirm);
 
-export const msgOptions = createModal(Options);
-export const msgPrompt = createModal(Prompt);
-export const msgMarquee = createModal(Marquee);
-export const msgNotification = createModal(Notification);
-export const msgPreviewPhoto = createModal(PreviewPhoto);
-export const msgPreviewVideo = createModal(PreviewVideo);
+export const msgOptions = createModalCt(Options);
+export const msgPrompt = createModalCt(Prompt);
+export const msgMarquee = createModalCt(Marquee);
+export const msgNotification = createModalCt(Notification);
+export const msgPreviewPhoto = createModalCt(PreviewPhoto);
+export const msgPreviewVideo = createModalCt(PreviewVideo);
 
 
-export const msgAlert = createModal(Alert);
-export const msgToast = createModal(Toast);
-
+export const msgAlert = createModalCt(Alert);
+export const msgToast = createModalCt(Toast);
+export const createModal = createModalCt;
