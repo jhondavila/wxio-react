@@ -56,7 +56,7 @@ class ModalConfirm extends React.Component {
                 {
                     this.props.title &&
                     <Modal.Header closeButton={this.props.closeButton}>
-                        <Modal.Title>{this.props.title}</Modal.Title>
+                        <Modal.Title className={this.props.classNameTitle}>{this.props.title}</Modal.Title>
                     </Modal.Header>
                 }
                 {
@@ -64,7 +64,7 @@ class ModalConfirm extends React.Component {
                     (this.props.html ?
                         <Modal.Body dangerouslySetInnerHTML={{ __html: this.props.html }}></Modal.Body>
                         :
-                        <Modal.Body >
+                        <Modal.Body className={this.props.classNameDesc}>
                             {this.props.desc}
                         </Modal.Body>)
                 }
