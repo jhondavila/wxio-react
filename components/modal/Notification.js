@@ -15,7 +15,7 @@ class ModalPrompt extends React.Component {
         }
     }
     componentDidMount() {
-     
+
     }
     componentWillUnmount() {
         // clearInterval(this.timerRefresh);
@@ -67,15 +67,19 @@ class ModalPrompt extends React.Component {
                     </Row>
                     <Form.Group as={Row} >
                         <Form.Label column className="text-left">
-                            Título
-                                        </Form.Label>
+                            {
+                                this.props.titleMessage
+                            }
+                        </Form.Label>
                         <Col sm="18">
                             <Form.Control type={"text"} min="10" max="300" value={this.state.title} onChange={e => this.setState({ title: e.target.value })} />
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} >
                         <Form.Label column className="text-left">
-                            Mensaje
+                            {
+                                this.props.bodyMessage
+                            }
                         </Form.Label>
                         <Col sm="18">
                             <Form.Control
