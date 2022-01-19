@@ -7,8 +7,8 @@ let lastEditorId = 0;
 export default class extends Component {
   constructor(props) {
     super(props);
-
     this.editorId = props.editorId || `editor-layer-${++lastEditorId}`;
+    console.log(this.editorId,"<x<x<xs")
   }
 
   componentDidMount() {
