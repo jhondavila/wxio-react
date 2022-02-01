@@ -417,5 +417,4 @@ class Utils {
 }
 
 
-window.utils = new Utils();
 export default new Utils();
