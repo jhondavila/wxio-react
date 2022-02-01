@@ -88,7 +88,6 @@ class Container extends React.Component {
             filters: [],
             values: []
         };
-        // window.ChooserField = this;
     }
     getSelection() {
         return {
