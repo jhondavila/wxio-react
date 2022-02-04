@@ -11,8 +11,13 @@ import Notification from "./Notification";
 import Marquee from "./Marquee";
 import PreviewPhoto from "./PreviewPhoto";
 import PreviewVideo from "./PreviewVideo";
+import { SearchModal } from './SearchModal';
+
+
 export const confirm = createModalCt(Confirm);
 export const msgConfirm = createModalCt(Confirm);
+
+export const Search = createModalCt(SearchModal);
 
 export const msgOptions = createModalCt(Options);
 export const msgPrompt = createModalCt(Prompt);
