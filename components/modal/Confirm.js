@@ -72,11 +72,19 @@ class ModalConfirm extends React.Component {
                     {
                         !this.props.hideClose && <Button variant="secondary" onClick={this.cancel.bind(this)}>
                             {this.props.textClose || Utils.t("close")}
+                            {
+                                this.props.closeIcon && this.props.closeIcon()
+                            }
                         </Button>
                     }
 
                     {
-                        !this.props.hideConfirm && <Button variant="primary" onClick={this.confirm.bind(this)}>{this.props.textConfirm || Utils.t("confirm")}</Button>
+                        !this.props.hideConfirm && <Button variant="primary" onClick={this.confirm.bind(this)}>
+                            {this.props.textConfirm || Utils.t("confirm")}
+                            {
+                                this.props.confirmIcon && this.props.confirmIcon()
+                            }    
+                        </Button>
                     }
 
                 </Modal.Footer>
