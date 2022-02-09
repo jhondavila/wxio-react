@@ -96,6 +96,7 @@ export class InputSelectSearch extends React.Component {
 	}
 
 	render() {
+		console.log(this.props.disabled)
 		return (
 			<div className="input-select-search" tabIndex="0" onKeyPress={this.onKeyPress} disabled={this.props.disabled}>
 				<div className="content">
@@ -107,14 +108,14 @@ export class InputSelectSearch extends React.Component {
 					}
 				</div>
 				{
-          this.disabled ? (
+          !this.props.disabled ? (
 					this.state.record ?
 						<i className="far fa-trash-alt" onClick={this.onClearSelection}></i>
 						: null)
           : null  
 				}
         {
-          this.disabled ?
+          !this.props.disabled ?
           <i className="fad fa-search" onClick={this.onClick}></i>
           : null
         }
