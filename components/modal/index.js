@@ -1,4 +1,4 @@
-import createModalCt from "./createModal"
+import createModalCt from "./createModal";
 
 
 import Confirm from "./Confirm";
@@ -13,6 +13,9 @@ import PreviewPhoto from "./PreviewPhoto";
 import PreviewVideo from "./PreviewVideo";
 import { SearchModal } from './SearchModal';
 
+
+
+export const CreateModal = createModalCt;
 
 export const confirm = createModalCt(Confirm);
 export const msgConfirm = createModalCt(Confirm);

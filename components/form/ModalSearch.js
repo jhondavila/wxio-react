@@ -13,7 +13,6 @@ export class ModalSearch extends React.Component {
 	}
 	async componentDidMount() {
 
-		console.log(this.props.store);
 		if (this.props.store && this.props.store._isStore) this.props.store.clearFilters();
 
 		if (this.props.show) {

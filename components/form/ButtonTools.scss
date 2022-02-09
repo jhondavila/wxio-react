@@ -1,0 +1,17 @@
+.button-tools-form {
+  height: 25px;
+  width: 25px;
+  padding: 0px;
+  background-color: white;
+  color: #417cb9;
+  border: white;
+  margin-right: 2px;
+}
+
+.button-tools-form.disabled, .button-tools-form:disabled {
+  background-color: #e9ecef !important;
+  opacity: 1;
+  border-color: #417cb9;
+  color: #417cb9;
+  
+}

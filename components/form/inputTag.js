@@ -13,7 +13,6 @@ export class InputTag extends React.Component {
       internalStore: null,
       options: this.props.options
     };
-
   }
   parseValue(value) {
     if (typeof value === "string") {
@@ -85,7 +84,6 @@ export class InputTag extends React.Component {
   componentDidMount() {
 
     this.loadValues();
-
     //this.focusInput();
   }
 
