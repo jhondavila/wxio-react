@@ -106,7 +106,11 @@ class ButtonImport extends Component {
                 let data = this.processData({ results, keys: response.keys });
                 records = this.props.store.add(data);
                 this.props.store.emit("import");
-                await this.validateRecords(records);
+                if (this.props.recordValidate) {
+                    this.props.store.emit("validateRecords");
+                    await this.validateRecords(records);
+                    this.props.store.emit("validateRecordsEnd");
+                }
             } else {
                 return false;
             }
@@ -114,7 +118,11 @@ class ButtonImport extends Component {
             let data = this.processData({ results, keys });
             records = this.props.store.add(data);
             this.props.store.emit("import");
-            await this.validateRecords(records);
+            if (this.props.recordValidate) {
+                this.props.store.emit("validateRecords");
+                await this.validateRecords(records);
+                this.props.store.emit("validateRecordsEnd");
+            }
         }
         return records;
     }
@@ -172,6 +180,9 @@ class ButtonImport extends Component {
 
 }
 
+ButtonImport.defaultProps = {
+	recordValidate: true
+};
 
 export {
     ButtonImport
