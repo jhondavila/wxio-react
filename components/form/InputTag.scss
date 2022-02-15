@@ -1,0 +1,74 @@
+.input-tag {
+  background: white;
+  border: 1px solid #d6d6d6;
+  border-radius: 0px;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 5px 5px 0;
+  display: flex;
+  min-height: 35px;
+}
+
+.input-tag[disabled] {
+  background: #e9ecef;
+  
+}
+
+.input-tag-content {
+  flex: 1 1;
+}
+
+.input-tag input {
+  border: none;
+  width: 100%;
+  font-size: 1rem;
+}
+.input-tag input:focus {
+  outline: none;
+  box-shadow: transparent;
+  box-shadow: none;
+}
+
+.input-tag .fa-trash-alt {
+  background: #145f2a;
+  padding: 4px;
+  color: white;
+  position: relative;
+  right: -10px;
+  height: 100%;
+}
+
+.input-tag .fa-trash-alt[disabled] {
+  background: #5d5e5d;
+}
+
+.input-tag__tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.input-tag__tags li {
+  align-items: center;
+  background: #7cb51b;
+  border-radius: 2px;
+  color: white;
+  display: flex;
+  font-weight: 300;
+  list-style: none;
+  margin-bottom: 5px;
+  margin-right: 5px;
+  padding: 0px 10px;
+}
+
+.input-tag__tags li[disabled] {
+  background: #a0a0a0;
+}
+
+.input-tag__tags li.input-tag__tags__input {
+  background: none;
+  flex-grow: 1;
+  padding: 0;
+}

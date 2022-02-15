@@ -1,6 +1,8 @@
 import React from 'react';
 import { ModalSearch } from "./ModalSearch";
+import PropTypes from 'prop-types';
 import { Store } from "Wx/store"
+import "./InputTag.scss";
 
 export class InputTag extends React.Component {
   constructor(opts) {
@@ -16,9 +18,9 @@ export class InputTag extends React.Component {
   }
   parseValue(value) {
     if (typeof value === "string") {
-      value = value.split(this.props.separator || ",");
+      value = value.split(this.props.separator || ",");// 01,0,2
     } else if (value._isStore) {
-      value = value.getData();
+      value = value.getData();//[{id : "01", text : "FACTURA"}]
     } else {
       value = value || [];
     }
@@ -45,20 +47,33 @@ export class InputTag extends React.Component {
     return store;
   }
 
-  loadValues() {
+  async loadValues() {
     let { value, options } = this.props;
     //debugger
-    let castValues = value._isStore ? value : this.parseValue(value);
+    let castValues = value ? await this.parseValue(value) : null;
 
     let storeOptions;
     let internalValue;
-    // debugger
+    //debugger
 
     if (options._isStore) {
+      // cual es la propiedad del store value //canal_id
+      // cual es la propiedad a comparar del store options // canales=> id_canal
+      
+      await options.load();
       storeOptions = options;
+      //debugger
+
       internalValue = castValues.map(item => {
-        return storeOptions.find({ [this.props.valueTag]: item });
+      
+        if (storeOptions.find({ [this.props.valueTag]: value._isStore ? item[this.props.valueField] : item })){
+          console.log(item)
+          return item;
+        }
+        //return storeOptions.find({ [this.props.valueTag]: value._isStore ? item[this.props.valueField] : item });;
+      
       }).filter(i => !!i);
+
     } else if (Array.isArray(options)) {
 
       storeOptions = this.createLocalStore(options);
@@ -203,57 +218,68 @@ export class InputTag extends React.Component {
     const { internalValue, internalStore } = this.state;
     return (
       <>
-        <div className="input-tag" >
-          <ul className="input-tag__tags">
-            {internalValue.map((tag, i) => {
-              let text;
-              let key;
-              let element;
-              if (typeof tag === "string") {
-                text = tag;
-                key = tag;
-                element = i;
-              } else if (tag && tag._isModel) {
+        <div className="input-tag" disabled={this.props.disabled}>
+          <div className="input-tag-content">
+            <ul className="input-tag__tags">
+              {internalValue.map((tag, i) => {
+                let text;
+                let key;
+                let element;
+                if (typeof tag === "string") {
+                  text = tag;
+                  key = tag;
+                  element = i;
+                } else if (tag && tag._isModel) {
 
-                key = tag.get(this.props.displayTag || "id");
-                text = tag.get(this.props.displayTag || "text");
-                element = tag;
-              } else if (typeof tag === "object") {
-                key = tag[this.props.valueTag || "id"]
-                text = tag[this.props.displayTag || "text"];
-                element = i;
-              }
-              return (
-                <li key={key}>
-                  {
-                    text
-                  }
-                  <a href="#" onClick={() => { this.removeTag(element); }}><i className="far fa-trash-alt"></i></a>
-                </li>
-              )
-            })}
-            <li className="input-tag__tags__input">
-              <input type="text"
-                {
-                ...(
-                  this.state.options ? {
-                    onKeyPress: this.onKeyPress
-                  } :
-                    {
-                      onKeyDown: this.inputKeyDown,
-                      onBlur: this.OutTagFocus
-                    }
-                )
+                  key = tag.get(this.props.displayTag || "id");
+                  text = tag.get(this.props.displayTag || "text");
+                  element = tag;
+                } else if (typeof tag === "object") {
+                  key = tag[this.props.valueTag || "id"]
+                  text = tag[this.props.displayTag || "text"];
+                  element = i;
                 }
-                ref={c => { this.tagInput = c; }}
-
-
-              />
-              {
-                this.state.options ? <i className="fad fa-search" onClick={this.onClick.bind(this)}></i> : null
-              }
-            </li>
-          </ul>
+                return (
+                  <li key={key} disabled={this.props.disabled}>
+                    {
+                      text
+                    }
+                    {
+                      !this.props.disabled ? <a href="#" onClick={() => { this.removeTag(element); }}><i className="far fa-trash-alt"></i></a>: null
+                    }
+                    
+                  </li>
+                )
+              })}
+              <li className="input-tag__tags__input">
+                {
+                  /*
+                  <input type="text"
+                  {
+                    ...(
+                      this.state.options ? {
+                        onKeyPress: this.onKeyPress
+                      } :
+                      {
+                        onKeyDown: this.inputKeyDown,
+                        onBlur: this.OutTagFocus
+                      }
+                      )
+                    }
+                    ref={c => { this.tagInput = c; }}
+                    
+                    
+                    />
+                    */
+                }
+              </li>
+            </ul>
+          </div>
+          <div>
+            {
+              this.state.options ? <i className="fad fa-search" onClick={this.onClick.bind(this)}></i> : null
+            }
+          </div>
         </div>
         {
           internalStore &&
@@ -269,17 +295,19 @@ export class InputTag extends React.Component {
             store={internalStore}
             title={this.props.title}
             selectRecord={(record) => {
-
-              // let newValue = {
-              //   [this.props.valueTag || "id"]: record.get(this.props.valueField || this.props.valueTag || "id"),
-              //   [this.props.displayTag || "text"]: record.get(this.props.displayField || this.props.displayTag || "text")
-              // };
-              // // debugger
-              // if (value._isStore) {
               if (this.props.value._isStore) {
-                this.props.value.add({
-                  [this.props.valueTag]: record.text
-                });
+                if(record._isModel){
+
+                  console.log(this.props.value, record[record.valueTag]);
+                  this.props.value.add({
+                    [this.props.valueTag]: record[this.props.valueTag],
+                    [this.props.displayTag]: record[this.props.displayTag]
+                  });
+                }else{
+                  this.props.value.add({
+                    [this.props.valueTag]: record.text
+                  });
+                }
                 this.onUpdateValues();
               } else {
                 this.setState({
@@ -295,3 +323,16 @@ export class InputTag extends React.Component {
     );
   }
 }
+
+/*
+InputTagComponent.propTypes = {
+  store: PropTypes.oneOfType([PropTypes.array]),
+  fields: PropTypes.oneOfType([PropTypes.array]),
+  valueTag: PropTypes.string.isRequired,
+  valueField: PropTypes.string.isRequired,
+  displayField: PropTypes.string.isRequired,
+  displayTag: PropTypes.string.isRequired,
+  columns: PropTypes.object.isRequired
+}
+*/
+//export const InputTag = InputTagComponent;
