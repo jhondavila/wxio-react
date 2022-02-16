@@ -94,7 +94,10 @@ export class InputTag extends React.Component {
     this.setState({
       internalValue: internalValue,
       internalStore: storeOptions,
+    }, ()=>{
+      this.forceUpdate();
     });
+    
   }
   componentDidMount() {
 

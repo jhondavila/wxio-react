@@ -41,12 +41,17 @@
     }
 
     .wx-item {
-        border-bottom: 1px solid #e1e1e1;
         margin: 0;
         padding: 5px 15px;
         &:hover {
             background-color: #e1e1e1;
         }
+    }
+    .wx-divider {
+        margin: 0;
+        padding: 5px;
+        border-bottom: 1px solid #e1e1e1;
+
     }
     .wx-item-icon {
         margin-right: 10px;
