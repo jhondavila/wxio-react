@@ -61,9 +61,6 @@ export class SearchModal extends React.Component {
 		let record = this.props.store.find({ [key]: value })
 
 		if (!record) {
-			//console.log(this.props.customValueField);
-			//if(this.props.customValueField){
-
 				let filters = this.props.customValueField.map((i) => {
 					return {
 						property: i,
@@ -76,8 +73,6 @@ export class SearchModal extends React.Component {
 				await this.props.store.loadByFilters(filters);
 	
 				record = this.props.store.find({ [key]: value })
-			//}
-			//console.log(record)
 		}
 		if (record) {
 
@@ -90,11 +85,7 @@ export class SearchModal extends React.Component {
 			}
 		} else {
 			console.error("VALUE RECORD NO FOUND =>>", this.props.value)
-			// console.log(this.props.value, "No implementado...")
 		}
-
-
-
 	}
 
 	onClick = () => {

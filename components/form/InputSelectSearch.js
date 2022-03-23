@@ -12,7 +12,6 @@ export class InputSelectSearch extends React.Component {
 			search: "",
 			recordSelected: null
 		}
-    console.log(this.props.disabled);
 	}
 	async componentDidMount() {
 		// this.props.store.setStaticFilters(this.props.staticFilters)
@@ -96,7 +95,6 @@ export class InputSelectSearch extends React.Component {
 	}
 
 	render() {
-		console.log(this.props.disabled)
 		return (
 			<div className="input-select-search" tabIndex="0" onKeyPress={this.onKeyPress} disabled={this.props.disabled}>
 				<div className="content">
