@@ -121,6 +121,8 @@ export class InputSelectSearch extends React.Component {
 					show={this.state.show}
 					onClose={this.handlerClose}
 					columns={this.props.columns}
+					keyId={this.props.keyId}
+					addOption={this.props.addOption}
 					store={this.props.store}
 					title={this.props.title}
 					staticFilters={this.props.staticFilters}

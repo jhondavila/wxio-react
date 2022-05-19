@@ -228,6 +228,7 @@ export class ModalSearch extends React.Component {
 					<input className="fieldsearch" type="text" value={this.state.value} onChange={this.onTextSearchChange} />
 					<Table
 						ref={c => this.table = c}
+						keyId={this.props.keyId}
 						onClickRow={this.onClickRow}
 						onDblClickRow={this.onDblClickRow}
 						columns={this.props.columns}
@@ -237,9 +238,12 @@ export class ModalSearch extends React.Component {
 						autoLoad={false}
 					/>
 				</Modal.Body>
-				<Modal.Footer>
-					<Button variant="secondary" onClick={this.handlerClose}>Cancelar</Button>
-					<Button variant="primary" onClick={this.handlerAceptar}>Aceptar</Button>
+				<Modal.Footer style={{"display":"flow-root"}}>
+					{
+						this.props.addOption ? <Button variant="warning" style={{'float':'left'}} onClick={this.props.addOption}><i className={"fas fa-plus"}></i></Button> : null
+					}
+					<Button style={{'float': 'right'}} variant="secondary" onClick={this.handlerClose}>Cancelar</Button>
+					<Button style={{'float': 'right'}} variant="primary" onClick={this.handlerAceptar}>Aceptar</Button>
 				</Modal.Footer>
 			</Modal>
 		)

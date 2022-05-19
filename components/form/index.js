@@ -3,3 +3,4 @@ export * from './ModalSearch';
 export * from './InputSelectSearch';
 export * from './ButtonTools';
 export * from './ToolsForm';
+export * from './PdfReadIframe';
