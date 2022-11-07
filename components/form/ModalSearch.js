@@ -61,9 +61,9 @@ export class ModalSearch extends React.Component {
 
 		if (!record) {
 			//console.log(this.props.customValueField);
-			//if(this.props.customValueField){
-
+			if(this.props.customValueField){
 				let filters = this.props.customValueField.map((i) => {
+					//debugger
 					return {
 						property: i,
 						value: value,
@@ -73,9 +73,9 @@ export class ModalSearch extends React.Component {
 					}
 				});
 				await this.props.store.loadByFilters(filters);
+			}
 	
 				record = this.props.store.find({ [key]: value })
-			//}
 			//console.log(record)
 		}
 		if (record) {
@@ -88,7 +88,7 @@ export class ModalSearch extends React.Component {
 				this.props.onLoadRecord(record);
 			}
 		} else {
-			console.error("VALUE RECORD NO FOUND =>>", this.props.value)
+			//console.error("VALUE RECORD NO FOUND =>>", this.props.value)
 			// console.log(this.props.value, "No implementado...")
 		}
 
