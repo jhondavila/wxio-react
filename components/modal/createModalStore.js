@@ -22,7 +22,7 @@ const createConfirmation = (Component, unmountDelay = 2000, mountingNode) => {
         const promise = new BBPromise((resolve, reject, onCancel) => {
             try {
                 const instance = ReactDOM.render(
-                    
+
                     <Provider store={ProjectManager.getActive().store}>
                         <Component
                             reject={reject}
@@ -37,9 +37,11 @@ const createConfirmation = (Component, unmountDelay = 2000, mountingNode) => {
                 );
                 // console.log(render)
                 onCancel(() => {
-                    instance.setState({
-                        show: false
-                    });
+                    if (instance) {
+                        instance.setState({
+                            show: false
+                        });
+                    }
                     dispose();
                 })
             } catch (e) {

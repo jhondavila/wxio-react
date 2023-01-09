@@ -56,7 +56,7 @@ class ModalConfirm extends React.Component {
                 {
                     this.props.title &&
                     <Modal.Header closeButton={this.props.closeButton}>
-                        <Modal.Title>{this.props.title}</Modal.Title>
+                        <Modal.Title className={this.props.classNameTitle}>{this.props.title}</Modal.Title>
                     </Modal.Header>
                 }
                 {
@@ -64,7 +64,7 @@ class ModalConfirm extends React.Component {
                     (this.props.html ?
                         <Modal.Body dangerouslySetInnerHTML={{ __html: this.props.html }}></Modal.Body>
                         :
-                        <Modal.Body >
+                        <Modal.Body className={this.props.classNameDesc}>
                             {this.props.desc}
                         </Modal.Body>)
                 }
@@ -72,11 +72,19 @@ class ModalConfirm extends React.Component {
                     {
                         !this.props.hideClose && <Button variant="secondary" onClick={this.cancel.bind(this)}>
                             {this.props.textClose || Utils.t("close")}
+                            {
+                                this.props.closeIcon && this.props.closeIcon()
+                            }
                         </Button>
                     }
 
                     {
-                        !this.props.hideConfirm && <Button variant="primary" onClick={this.confirm.bind(this)}>{this.props.textConfirm || Utils.t("confirm")}</Button>
+                        !this.props.hideConfirm && <Button variant="primary" onClick={this.confirm.bind(this)}>
+                            {this.props.textConfirm || Utils.t("confirm")}
+                            {
+                                this.props.confirmIcon && this.props.confirmIcon()
+                            }    
+                        </Button>
                     }
 
                 </Modal.Footer>

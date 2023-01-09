@@ -67,7 +67,7 @@ class TinyMCE extends React.Component {
             link_title: false,
             fontsize_formats: "8px 10px 12px 14px 18px 24px 36px",
             init_instance_callback: editor => {
-                if (_this.value) {
+                if (_this.props.value) {
                     editor.setContent(_this.props.value);
                 }
                 editor.on("NodeChange Change KeyUp SetContent", () => {

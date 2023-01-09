@@ -2,6 +2,8 @@ import * as  _ from "lodash";
 import UtilsExport from "./Utils";
 import XLSX from "sheetjs-style";
 import moment from "moment"
+import { format as numberFormat } from "../table/number/index"
+
 export default {
 
     getArrayDepth(obj) {
@@ -138,7 +140,9 @@ export default {
         colsWidth.push(...this.getColsWidth(columns));
         let list = data.map(i => {
             return mapCols.map(c => {
-                if (c.format) {
+                if (c.type == "number"){
+					return  numberFormat(c.format || "#,###.00", i[c.dataIndex]);
+                } else if(c.type == "date" && c.format){
                     return moment(i[c.dataIndex]).format(c.format)
                 } else if (c.renderExport) {
                     return c.renderExport({ value: i[c.dataIndex], dataIndex: c.dataIndex, col: c })
