@@ -14,25 +14,31 @@ class ButtonImport extends Component {
     }
     async onChageUploader(files) {
         let importer = new Importer();
-        // let data = [];
-        // let cols = [];
         let records;
-
-        console.log(files)
         for (let x = 0; x < files.length; x++) {
             let file = files[x];
             if (importer.isExcel(file)) {
 
                 let { headers, results } = await importer.readerData(file);
                 if (this.props.process) {
-                    records = await this.props.process({ headers, results, file: file })
+                    records = await this.props.process({ headers, results, file: file, importer })
                 } else {
 
-                    records = await this.process({ headers, results });
+                    records = await this.process({ headers, results, importer });
                 }
                 // let columns = this.props.columns;
                 // columns = header;
                 // data.push(...results);
+            } else if (importer.isJSON(file)) {
+                // console.log(file)
+                let { results } = await importer.readerDataJSON(file);
+                if (this.props.process) {
+                    records = await this.props.process({ results, file: file, importer })
+                } else {
+
+                    records = await this.process({ results, importer });
+                }
+
             }
         }
 
