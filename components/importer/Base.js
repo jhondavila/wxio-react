@@ -14,7 +14,7 @@ class Importer {
                 const headers = this.getHeaderRow(worksheet)
                 const results = XLSX.utils.sheet_to_json(worksheet, {
                     raw: false, cellDates: true,
-                    cellStyles : true,
+                    cellStyles: true,
                     // sheetRows : true,
                     // cellHTML : true,
                     // cellNF : true
@@ -55,6 +55,32 @@ class Importer {
     // }
     isExcel(file) {
         return /\.(xlsx|xls|csv)$/.test(file.name)
+    }
+    isJSON(file) {
+        return /\.(json)$/.test(file.name)
+    }
+    readerDataJSON(rawFile) {
+        this.loading = true
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader()
+            reader.onload = e => {
+                const data = e.target.result;
+                // console.log(data)
+                let results = null;
+                try {
+                    results = JSON.parse(data);
+                } catch (error) {
+
+                }
+                // console.log("headers =>",worksheet)
+                // console.log("headers =>",headers)
+                // console.log("results =>",results)
+                // this.generateData({ header, results })
+                this.loading = false;
+                resolve({ results });
+            }
+            reader.readAsText(rawFile)
+        })
     }
 }
 
