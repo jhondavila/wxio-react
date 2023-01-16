@@ -49,7 +49,7 @@ class PivotGrid extends React.Component {
 
                 fields.push({
                     dataIndex: field.name,
-                    text: labels[field.name] || field.text || field.name,
+                    text: labels[field.name] || field.label || field.name,
                 });
             }
 
@@ -133,7 +133,7 @@ class PivotGrid extends React.Component {
                 let model = this.props.store.model;
                 let labels = this.props.labels || {};
                 let field = model.fields[i.dataIndex];
-                i.text = labels[field.name] || field.text || field.name;
+                i.text = labels[field.name] || field.label || field.name;
             }
         })
         return {

@@ -44,28 +44,33 @@ export class InputSelectSearch extends React.Component {
 		let key = this.props.valueField;
 		let record = this.props.store.find({ [key]: value })
 
-		if (!record) {
-			// this.props.store.setStaticFilters(this.props.staticFilters)
-			// debugger
-			record = await this.props.store.loadByProperty(key, value, {
-				staticFilters: this.props.staticFilters
-			});
-		}
+		if (!record) { record = await this.props.store.loadByProperty(key, value); }
+		
 		if (record) {
 
 			this.setState({
-				record: record
+				record: record,
+				state: this.props.value
 			});
 
 			if (this.props.onLoadRecord) {
 				this.props.onLoadRecord(record);
 			}
 		} else {
-			console.error("VALUE RECORD NO FOUND =>>", this.props.value)
+			this.setState({
+				record: null,
+				error: true
+			});			
 		}
 	}
 
 	onClick = () => {
+		/*
+		this.props.store.loadByProperty({
+			staticFilters: this.props.staticFilters
+		})
+*/
+		//this.props.store.load();
 		this.setState({
 			show: true,
 		})
@@ -78,10 +83,16 @@ export class InputSelectSearch extends React.Component {
 
 	onClearSelection = () => {
 		this.setState({
-			record: null
+			record: null,
+			value: null,
+			error: false
 		});
+	
 		if (this.props.selectRecord) {
 			this.props.selectRecord(null);
+		}
+		if (this.props.onChangeValue) {
+			this.props.onChangeValue(null);
 		}
 	}
 
@@ -96,18 +107,18 @@ export class InputSelectSearch extends React.Component {
 
 	render() {
 		return (
-			<div className="input-select-search" tabIndex="0" onKeyPress={this.onKeyPress} disabled={this.props.disabled}>
+			<div className={`input-select-search ${this.state.error ? 'warning':''}`} tabIndex="0" onKeyPress={this.onKeyPress} disabled={this.props.disabled}>
 				<div className="content">
 					{
 						this.state.record ?
 							!this.props.displayTpl ? null : this.props.displayTpl(this.state.record)
 							:
-							null
+							this.props.value
 					}
 				</div>
 				{
           !this.props.disabled ? (
-					this.state.record ?
+					this.state.record || this.props.value ?
 						<i className="far fa-trash-alt" onClick={this.onClearSelection}></i>
 						: null)
           : null  
@@ -128,11 +139,17 @@ export class InputSelectSearch extends React.Component {
 					staticFilters={this.props.staticFilters}
 					selectRecord={(record) => {
 						this.setState({
-							record: record
+							record: record,
+							error: false,
+							value: record[this.props.valueField]
 						});
 						if (this.props.selectRecord) {
 							this.props.selectRecord(record);
 						}
+						if(this.props.onChangeValue){
+							this.props.onChangeValue(record[this.props.valueField])
+						}
+						this.forceUpdate();
 					}}
 				// onLoadRecord={(record) => {
 				// 	this.props.onLoadRecord(record);
