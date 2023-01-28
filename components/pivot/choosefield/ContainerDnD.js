@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { Field } from './Field';
 import update, { extend } from 'immutability-helper';
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Row, Col } from "react-bootstrap"
 import { ChooserField } from "./ChooserField"
 
