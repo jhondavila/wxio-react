@@ -3,6 +3,8 @@ import { CirclePicker } from 'react-color';
 import "./Style.scss";
 import { Label, Text, Rectangle, Date } from "./editor";
 import { ToolBar, BtnBar } from '../table';
+import { Button } from 'react-bootstrap';
+
 
 
 export class PDFCreate extends React.Component {
@@ -26,7 +28,7 @@ export class PDFCreate extends React.Component {
         return <Rectangle key={colIndex} text={col.label} left={col.left} top={col.top} width={col.width} height={col.height} Options={col.Options} />
         break;
       case 'text':
-        return <Text key={colIndex} label={col.label} text={col.field} x={col.x} y={col.y}/>
+        return <Text key={colIndex} label={col.label} text={col.field} x={col.x} y={col.y} />
         break;
       case 'date':
         return <Date key={colIndex} x={col.x} y={col.y} text={col.field || ""} />
@@ -49,22 +51,22 @@ export class PDFCreate extends React.Component {
           <BtnBar iconCls="fal fa-address-card" />
         </ToolBar>
         <div className="cont">
-        <div className="contpage">
-        
-          <div className="page" size="A4">
-            {
-              this.state.format.content.map((col, colIndex) => {
-                return (this.cmp(col, colIndex))
-              })
-            }
+          <div className="tools">
+              <Button iconCls="fal fa-address-card" />
+              <Button iconCls="fal fa-address-card" />
+              <Button iconCls="fal fa-address-card" />
+              <Button iconCls="fal fa-address-card" />
+            
           </div>
-          <div className="page" size="A4">
-            {
-              this.state.format.content.map((col, colIndex) => {
-                return (this.cmp(col, colIndex))
-              })
-            }
-          </div>
+          <div className="contpage">
+
+            <div className="page" size="A4">
+              {
+                this.state.format.content.map((col, colIndex) => {
+                  return (this.cmp(col, colIndex))
+                })
+              }
+            </div>
           </div>
         </div>
       </div>

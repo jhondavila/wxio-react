@@ -3,18 +3,27 @@
 }
 
 .pdf-editor>.cont {
+  display: flex;
+  .tools{
+    width: 110px;
+    display: block;
+    button{
+      margin: 5px;
+    }
+  }
+
+  .contpage {
+    height: calc(100vh - 135px);
+    background-color: #cccccc;
+    padding: 5px;
+    padding: 20px;
+    overflow: auto;
+    flex:1;
+  //  overflow:hidden;
   
+  }
 }
 
-.pdf-editor .contpage {
-  height: calc(100vh - 135px);
-  background-color: #cccccc;
-  padding: 5px;
-  padding: 20px;
-  overflow: auto;
-//  overflow:hidden;
-
-}
 .pdf-editor .page{
   background-color: #ffffff;
   //border: 1px solid #e1e1e1;
