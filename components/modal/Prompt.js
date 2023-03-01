@@ -88,7 +88,7 @@ class ModalPrompt extends React.Component {
                                         placeholder={this.props.placeholder}
                                         autoComplete="off"
                                         as={this.props.multiline ? "textarea" : "input"}
-                                        rows="3"
+                                        rows={this.props.rows || "3"}
 
                                         onChange={e => this.setState({ text: e.target.value })}
                                         ref={c => this.input = c}
