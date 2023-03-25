@@ -1,0 +1,59 @@
+.pdf-editor {
+  height: calc(100vh - 65px);
+}
+
+.pdf-editor>.cont {
+  display: flex;
+  .tools{
+    width: 110px;
+    display: block;
+    button{
+      margin: 5px;
+    }
+  }
+
+  .contpage {
+    height: calc(100vh - 135px);
+    background-color: #cccccc;
+    padding: 5px;
+    padding: 20px;
+    overflow: auto;
+    flex:1;
+  //  overflow:hidden;
+  
+  }
+}
+
+.pdf-editor .page{
+  background-color: #ffffff;
+  //border: 1px solid #e1e1e1;
+  padding: 0px;
+  width: 21cm;
+  min-height: 29.7cm;
+  margin-bottom: 0.5cm;
+  box-shadow: 0 0 0.5cm rgb(0 0 0 / 50%);
+  position: relative;
+}
+
+.pdf-editor .page [size="A4"]{
+}
+ 
+.page>.label{
+  position: absolute;
+  cursor: move;
+  
+}
+
+.page>.text{
+  position: absolute;
+}
+
+.page>.datefield{
+  position: absolute;
+}
+
+.page>.rectangle{
+  position: absolute;
+  border:1px solid black;
+  cursor: move;
+}

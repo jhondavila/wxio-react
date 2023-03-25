@@ -88,11 +88,10 @@ export class FilterCfg extends React.Component {
     refreshListOptions(){
         console.log("refreshListOptions");
         let data = this.props.store ? this.props.store.getData() : this.props.data;
-
         let list = _.chain(data).uniqBy(this.props.property).map((i,key)=>{
                 return {
                     value : i[this.props.property],
-                    text : i[this.props.property]
+                    text : String(i[this.props.property])
                 }
             }).sortBy(["value"],["asc"]).value()
 

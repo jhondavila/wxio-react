@@ -2,6 +2,9 @@ const onChangeValue = (keyForm, keyValidator, keyValidation) => {
 
     return async function (field, event) {
         let value = event.target.value;
+        if(value.trim() == ""){
+            value = null;
+        }
         let form = this.state[keyForm];
         form[field] = value;
         this.setState({

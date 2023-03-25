@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 // import * as pdfjsLib from 'pdfjs-dist';
 import PDFViewer from 'pdfjs-dist/web/pdf_viewer';
-import { Table, Cell, ToolBar, Panel, BtnBar } from './index';
+import { ToolBar, BtnBar } from '../table';
 
 import { Row, Col } from 'react-bootstrap';
 import pdf from 'pdfjs-dist';
-import { history } from "../_helpers/history"
+import { createBrowserHistory } from "history"
 // import pdfjsLib from "pdfjs-dist/build/pdf";
 // import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
 // pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
@@ -40,8 +40,7 @@ export class PDFbase extends React.Component {
 	// });
 	// }
 	async componentDidMount() {
-		GeneratePdf
-		
+			
 		this.iframe.onload = () => {
 			// let pdfapp = this.iframe.contentWindow.PDFViewerApplication;
 			if (this.props.document) {
@@ -75,7 +74,7 @@ export class PDFbase extends React.Component {
 		return blob;
 	}
 	async componentDidUpdate(prevProps) {
-		console.log("componentDidUpdate")
+		//console.log(this.props.document);
 		if (prevProps.document !== this.props.document) {
 			if (this.props.document) {
 				this.loadDocument(this.props.document)
@@ -85,14 +84,9 @@ export class PDFbase extends React.Component {
 
 	async loadDocument(document) {
 		try {
-			//console.log('aqui',document);
 			let pdfapp = await this.iframe.contentWindow.PDFViewerApplication;
-			//let file = this.b64toBlob(document, "application/pdf")
-			//var fileURL = URL.createObjectURL(file);
-			//var fileURL = URL.createObjectURL(document);
-			if(pdfapp){
+			if(pdfapp){	
 				pdfapp.open(document);
-				
 			}
 		} catch (error) {
 			console.log(error);
@@ -125,6 +119,8 @@ export class PDFbase extends React.Component {
 		// console.log("zoomPlus")
 	}
 	backPage() {
+	 const history = createBrowserHistory();
+
 		history.goBack();
 		console.log("backPage")
 	}
