@@ -59,6 +59,9 @@ class Importer {
     isJSON(file) {
         return /\.(json)$/.test(file.name)
     }
+    isTxt(file) {
+        return /\.(txt)$/.test(file.name)
+    }
     readerDataJSON(rawFile) {
         this.loading = true
         return new Promise((resolve, reject) => {
@@ -77,6 +80,17 @@ class Importer {
                 // console.log("results =>",results)
                 // this.generateData({ header, results })
                 this.loading = false;
+                resolve({ results });
+            }
+            reader.readAsText(rawFile)
+        })
+    }
+    readerTxt(rawFile) {
+        this.loading = true
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader()
+            reader.onload = e => {
+                const results = e.target.result;
                 resolve({ results });
             }
             reader.readAsText(rawFile)

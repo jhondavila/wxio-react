@@ -38,7 +38,13 @@ class ButtonImport extends Component {
 
                     records = await this.process({ results, importer });
                 }
-
+            } else if (importer.isTxt(file)) {
+                let { results } = await importer.readerTxt(file);
+                if (this.props.process) {
+                    records = await this.props.process({ results, file: file, importer })
+                } else {
+                    records = await this.process({ results, importer });
+                }
             }
         }
 
@@ -179,7 +185,7 @@ class ButtonImport extends Component {
                 size={this.props.size}
                 trigger={this.props.trigger}
                 text={"text"}
-                accept={"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"}
+                accept={this.props.accept || "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"}
             >{this.props.children}</Uploader>
         )
     }
@@ -187,7 +193,7 @@ class ButtonImport extends Component {
 }
 
 ButtonImport.defaultProps = {
-	recordValidate: true
+    recordValidate: true
 };
 
 export {
